@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:iparkpatrol_web/screens/tabs/home_tab.dart';
 
 import '../utlis/colors.dart';
 import '../widgets/text_widget.dart';
@@ -161,8 +163,35 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
             ),
-            const SizedBox(
-              width: 50,
+            SizedBox(
+              width: 1000,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const SizedBox(
+                        width: 50,
+                      ),
+                      Align(
+                        alignment: Alignment.topRight,
+                        child: TextWidget(
+                          text: DateFormat('MMMM dd, yyyy | hh:mm a')
+                              .format(DateTime.now()),
+                          fontSize: 14,
+                          fontFamily: 'Bold',
+                          color: primary,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  const HomeTab(),
+                ],
+              ),
             ),
           ],
         ),
