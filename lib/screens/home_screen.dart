@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:iparkpatrol_web/screens/login_page.dart';
 import 'package:iparkpatrol_web/screens/tabs/home_tab.dart';
 
 import '../utlis/colors.dart';
@@ -151,7 +152,48 @@ class _HomeScreenState extends State<HomeScreen> {
                       height: 50,
                     ),
                     ListTile(
-                      onTap: () {},
+                      onTap: () {
+                        showDialog(
+                            context: context,
+                            builder: (context) => AlertDialog(
+                                  title: const Text(
+                                    'Logout Confirmation',
+                                    style: TextStyle(
+                                        fontFamily: 'QBold',
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  content: const Text(
+                                    'Are you sure you want to Logout?',
+                                    style: TextStyle(fontFamily: 'QRegular'),
+                                  ),
+                                  actions: <Widget>[
+                                    MaterialButton(
+                                      onPressed: () =>
+                                          Navigator.of(context).pop(true),
+                                      child: const Text(
+                                        'Close',
+                                        style: TextStyle(
+                                            fontFamily: 'QRegular',
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ),
+                                    MaterialButton(
+                                      onPressed: () async {
+                                        Navigator.of(context).pushReplacement(
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    const LoginPage()));
+                                      },
+                                      child: const Text(
+                                        'Continue',
+                                        style: TextStyle(
+                                            fontFamily: 'QRegular',
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ),
+                                  ],
+                                ));
+                      },
                       title: TextWidget(
                         text: 'Logout',
                         fontSize: 18,
