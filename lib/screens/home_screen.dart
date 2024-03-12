@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:iparkpatrol_web/screens/login_page.dart';
+import 'package:iparkpatrol_web/screens/tabs/enforcer_tab.dart';
 import 'package:iparkpatrol_web/screens/tabs/home_tab.dart';
 import 'package:iparkpatrol_web/screens/tabs/parking_tab.dart';
 
@@ -232,7 +233,11 @@ class _HomeScreenState extends State<HomeScreen> {
                   const SizedBox(
                     height: 20,
                   ),
-                  inhome ? const HomeTab() : const ParkingTab(),
+                  inhome
+                      ? const HomeTab()
+                      : inenforcers
+                          ? const EnforcerTab()
+                          : const ParkingTab(),
                 ],
               ),
             ),
