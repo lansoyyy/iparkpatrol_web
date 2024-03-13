@@ -23,6 +23,7 @@ class TextFieldWidget extends StatefulWidget {
   final String? errorText;
   final bool? isRequred;
   bool? showErrorMsg;
+  late Color? textColor;
 
   TextFieldWidget(
       {super.key,
@@ -37,6 +38,7 @@ class TextFieldWidget extends StatefulWidget {
       this.height = 50,
       this.maxLine = 1,
       this.hintColor = Colors.white,
+      this.textColor = Colors.white,
       this.borderColor = const Color(0xff0093CB),
       this.showEye = false,
       this.color = Colors.white,
@@ -67,7 +69,7 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
                 style: TextStyle(
                   fontSize: 14,
                   fontFamily: 'Bold',
-                  color: primary,
+                  color: widget.textColor,
                   fontWeight: FontWeight.bold,
                 ),
               ),
