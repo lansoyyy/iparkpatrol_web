@@ -225,6 +225,31 @@ class _EnforcerTabState extends State<EnforcerTab> {
                                       label: 'Last Name',
                                       controller: lnameController,
                                     ),
+                                    const SizedBox(
+                                      width: 100,
+                                    ),
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        const Icon(
+                                          Icons.account_circle,
+                                          size: 150,
+                                          color: Colors.white,
+                                        ),
+                                        TextButton(
+                                          onPressed: () {},
+                                          child: TextWidget(
+                                            text: 'Upload picture',
+                                            fontSize: 14,
+                                            color: Colors.white,
+                                            fontFamily: 'Bold',
+                                          ),
+                                        ),
+                                      ],
+                                    )
                                   ],
                                 ),
                                 const SizedBox(
