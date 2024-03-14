@@ -4,6 +4,7 @@ import 'package:iparkpatrol_web/screens/login_page.dart';
 import 'package:iparkpatrol_web/screens/tabs/enforcer_tab.dart';
 import 'package:iparkpatrol_web/screens/tabs/home_tab.dart';
 import 'package:iparkpatrol_web/screens/tabs/parking_tab.dart';
+import 'package:iparkpatrol_web/screens/tabs/tickets_tab.dart';
 
 import '../utlis/colors.dart';
 import '../widgets/text_widget.dart';
@@ -237,7 +238,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       ? const HomeTab()
                       : inenforcers
                           ? const EnforcerTab()
-                          : const ParkingTab(),
+                          : intickets
+                              ? const TicketsTab()
+                              : const ParkingTab(),
                 ],
               ),
             ),
