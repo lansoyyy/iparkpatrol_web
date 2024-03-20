@@ -19,206 +19,245 @@ class _ParkingTabState extends State<ParkingTab> {
       padding: const EdgeInsets.only(
         left: 20,
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          TextWidget(
-            text: 'Illegal Parking History',
-            fontSize: 24,
-            fontFamily: 'Bold',
-            color: primary,
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(
+            width: 2,
+            color: Colors.grey,
           ),
-          const SizedBox(
-            height: 20,
-          ),
-          Container(
-              width: 1000,
-              height: 550,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: primary,
-              ),
-              child: SingleChildScrollView(
-                child: Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: Column(
-                    children: [
-                      Align(
-                        alignment: Alignment.topRight,
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(15.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  TextWidget(
+                    text: 'Illegal Parking History',
+                    fontSize: 24,
+                    fontFamily: 'Bold',
+                    color: primary,
+                  ),
+                  Align(
+                    alignment: Alignment.topRight,
+                    child: SizedBox(
+                      width: 150,
+                      height: 50,
+                      child: GestureDetector(
+                        onTap: () {
+                          dateFromPicker(context);
+                        },
                         child: SizedBox(
-                          width: 150,
+                          width: 325,
                           height: 50,
-                          child: GestureDetector(
-                            onTap: () {
-                              dateFromPicker(context);
-                            },
-                            child: SizedBox(
-                              width: 325,
-                              height: 50,
-                              child: TextFormField(
-                                enabled: false,
-                                style: const TextStyle(
-                                  fontFamily: 'Regular',
-                                  fontSize: 14,
-                                  color: Colors.white,
-                                ),
+                          child: TextFormField(
+                            enabled: false,
+                            style: TextStyle(
+                              fontFamily: 'Regular',
+                              fontSize: 14,
+                              color: primary,
+                            ),
 
-                                decoration: InputDecoration(
-                                  suffixIcon: const Icon(
-                                    Icons.calendar_month_outlined,
-                                    color: Colors.white,
-                                  ),
-                                  hintStyle: const TextStyle(
-                                    fontFamily: 'Regular',
+                            decoration: InputDecoration(
+                              suffixIcon: Icon(
+                                Icons.calendar_month_outlined,
+                                color: primary,
+                              ),
+                              hintStyle: const TextStyle(
+                                fontFamily: 'Regular',
+                                fontSize: 14,
+                                color: Colors.white,
+                              ),
+                              hintText: dateController.text,
+                              border: InputBorder.none,
+                              disabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: primary,
+                                ),
+                                borderRadius: BorderRadius.circular(5),
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: primary,
+                                ),
+                                borderRadius: BorderRadius.circular(5),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: primary,
+                                ),
+                                borderRadius: BorderRadius.circular(5),
+                              ),
+                              errorBorder: OutlineInputBorder(
+                                borderSide: const BorderSide(
+                                  color: Colors.red,
+                                ),
+                                borderRadius: BorderRadius.circular(5),
+                              ),
+                              errorStyle: const TextStyle(
+                                  fontFamily: 'Bold', fontSize: 12),
+                              focusedErrorBorder: OutlineInputBorder(
+                                borderSide: const BorderSide(
+                                  color: Colors.red,
+                                ),
+                                borderRadius: BorderRadius.circular(5),
+                              ),
+                            ),
+
+                            controller: dateController,
+                            // Pass the validator to the TextFormField
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              const Divider(
+                color: Colors.grey,
+                thickness: 1,
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              Container(
+                  width: 1000,
+                  height: 525,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: SingleChildScrollView(
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
+                      child: Column(
+                        children: [
+                          DataTable(columnSpacing: 100, columns: [
+                            DataColumn(
+                              label: TextWidget(
+                                text: '#',
+                                fontSize: 18,
+                                fontFamily: 'Bold',
+                                color: primary,
+                              ),
+                            ),
+                            DataColumn(
+                              label: TextWidget(
+                                text: 'Time',
+                                fontSize: 18,
+                                fontFamily: 'Bold',
+                                color: primary,
+                              ),
+                            ),
+                            DataColumn(
+                              label: TextWidget(
+                                text: 'Date',
+                                fontSize: 18,
+                                fontFamily: 'Bold',
+                                color: primary,
+                              ),
+                            ),
+                            DataColumn(
+                              label: TextWidget(
+                                text: 'NPS Area',
+                                fontSize: 18,
+                                fontFamily: 'Bold',
+                                color: primary,
+                              ),
+                            ),
+                            DataColumn(
+                              label: TextWidget(
+                                text: 'Option',
+                                fontSize: 18,
+                                fontFamily: 'Bold',
+                                color: primary,
+                              ),
+                            ),
+                          ], rows: [
+                            for (int i = 0; i < 50; i++)
+                              DataRow(cells: [
+                                DataCell(
+                                  TextWidget(
+                                    text: '2024-0003',
                                     fontSize: 14,
-                                    color: Colors.white,
-                                  ),
-                                  hintText: dateController.text,
-                                  border: InputBorder.none,
-                                  disabledBorder: OutlineInputBorder(
-                                    borderSide: const BorderSide(
-                                      color: Colors.white,
-                                    ),
-                                    borderRadius: BorderRadius.circular(5),
-                                  ),
-                                  enabledBorder: OutlineInputBorder(
-                                    borderSide: const BorderSide(
-                                      color: Colors.white,
-                                    ),
-                                    borderRadius: BorderRadius.circular(5),
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderSide: const BorderSide(
-                                      color: Colors.white,
-                                    ),
-                                    borderRadius: BorderRadius.circular(5),
-                                  ),
-                                  errorBorder: OutlineInputBorder(
-                                    borderSide: const BorderSide(
-                                      color: Colors.red,
-                                    ),
-                                    borderRadius: BorderRadius.circular(5),
-                                  ),
-                                  errorStyle: const TextStyle(
-                                      fontFamily: 'Bold', fontSize: 12),
-                                  focusedErrorBorder: OutlineInputBorder(
-                                    borderSide: const BorderSide(
-                                      color: Colors.red,
-                                    ),
-                                    borderRadius: BorderRadius.circular(5),
+                                    color: primary,
                                   ),
                                 ),
-
-                                controller: dateController,
-                                // Pass the validator to the TextFormField
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      DataTable(columns: [
-                        DataColumn(
-                          label: TextWidget(
-                            text: '#',
-                            fontSize: 18,
-                            fontFamily: 'Bold',
-                            color: Colors.white,
-                          ),
-                        ),
-                        DataColumn(
-                          label: TextWidget(
-                            text: 'Time',
-                            fontSize: 18,
-                            fontFamily: 'Bold',
-                            color: Colors.white,
-                          ),
-                        ),
-                        DataColumn(
-                          label: TextWidget(
-                            text: 'Date',
-                            fontSize: 18,
-                            fontFamily: 'Bold',
-                            color: Colors.white,
-                          ),
-                        ),
-                        DataColumn(
-                          label: TextWidget(
-                            text: 'Option',
-                            fontSize: 18,
-                            fontFamily: 'Bold',
-                            color: Colors.white,
-                          ),
-                        ),
-                      ], rows: [
-                        for (int i = 0; i < 50; i++)
-                          DataRow(cells: [
-                            DataCell(
-                              TextWidget(
-                                text: '${i + 1}',
-                                fontSize: 14,
-                                color: Colors.white,
-                              ),
-                            ),
-                            DataCell(
-                              TextWidget(
-                                text: DateFormat('hh:mm a')
-                                    .format(DateTime.now()),
-                                fontSize: 14,
-                                color: Colors.white,
-                              ),
-                            ),
-                            DataCell(
-                              TextWidget(
-                                text: DateFormat('yyyy-MM-dd')
-                                    .format(DateTime.now()),
-                                fontSize: 14,
-                                color: Colors.white,
-                              ),
-                            ),
-                            DataCell(TextButton(
-                              onPressed: () {
-                                showDialog(
-                                  context: context,
-                                  builder: (context) {
-                                    return AlertDialog(
-                                      content: Container(
-                                        width: 750,
-                                        height: 400,
-                                        color: Colors.grey,
-                                      ),
-                                      actions: [
-                                        TextButton(
-                                          onPressed: () {
-                                            Navigator.pop(context);
-                                          },
-                                          child: TextWidget(
-                                            text: 'Close',
-                                            fontSize: 18,
+                                DataCell(
+                                  TextWidget(
+                                    text: DateFormat('hh:mm a')
+                                        .format(DateTime.now()),
+                                    fontSize: 14,
+                                    color: primary,
+                                    fontFamily: 'Bold',
+                                  ),
+                                ),
+                                DataCell(
+                                  TextWidget(
+                                    text: DateFormat('yyyy-MM-dd')
+                                        .format(DateTime.now()),
+                                    fontSize: 14,
+                                    color: primary,
+                                    fontFamily: 'Bold',
+                                  ),
+                                ),
+                                DataCell(
+                                  TextWidget(
+                                    text: 'NPS - Divisoria',
+                                    fontSize: 14,
+                                    color: primary,
+                                    fontFamily: 'Bold',
+                                  ),
+                                ),
+                                DataCell(TextButton(
+                                  onPressed: () {
+                                    showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        return AlertDialog(
+                                          content: Container(
+                                            width: 750,
+                                            height: 400,
+                                            color: Colors.grey,
                                           ),
-                                        ),
-                                      ],
+                                          actions: [
+                                            TextButton(
+                                              onPressed: () {
+                                                Navigator.pop(context);
+                                              },
+                                              child: TextWidget(
+                                                text: 'Close',
+                                                fontSize: 18,
+                                              ),
+                                            ),
+                                          ],
+                                        );
+                                      },
                                     );
                                   },
-                                );
-                              },
-                              child: TextWidget(
-                                text: 'View Image',
-                                decoration: TextDecoration.underline,
-                                fontSize: 14,
-                                color: Colors.white,
-                              ),
-                            )),
+                                  child: TextWidget(
+                                    text: 'View Image',
+                                    decoration: TextDecoration.underline,
+                                    fontSize: 14,
+                                    color: primary,
+                                    fontFamily: 'Bold',
+                                  ),
+                                )),
+                              ])
                           ])
-                      ])
-                    ],
-                  ),
-                ),
-              ))
-        ],
+                        ],
+                      ),
+                    ),
+                  ))
+            ],
+          ),
+        ),
       ),
     );
   }
