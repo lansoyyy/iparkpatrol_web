@@ -237,6 +237,7 @@ class _EnforcerTabState extends State<EnforcerTab> {
                                           MainAxisAlignment.start,
                                       children: [
                                         TextFieldWidget(
+                                          textColor: primary,
                                           width: 200,
                                           label: 'First Name',
                                           controller: fnameController,
@@ -245,6 +246,7 @@ class _EnforcerTabState extends State<EnforcerTab> {
                                           width: 20,
                                         ),
                                         TextFieldWidget(
+                                          textColor: primary,
                                           width: 80,
                                           label: 'M.I',
                                           controller: mnameController,
@@ -253,6 +255,7 @@ class _EnforcerTabState extends State<EnforcerTab> {
                                           width: 20,
                                         ),
                                         TextFieldWidget(
+                                          textColor: primary,
                                           width: 200,
                                           label: 'Last Name',
                                           controller: lnameController,
@@ -305,6 +308,7 @@ class _EnforcerTabState extends State<EnforcerTab> {
                                           MainAxisAlignment.start,
                                       children: [
                                         TextFieldWidget(
+                                          textColor: primary,
                                           width: 175,
                                           label: 'Purok/Street/Zone',
                                           controller: purokController,
@@ -313,6 +317,7 @@ class _EnforcerTabState extends State<EnforcerTab> {
                                           width: 20,
                                         ),
                                         TextFieldWidget(
+                                          textColor: primary,
                                           width: 175,
                                           label: 'Barangay',
                                           controller: brgyController,
@@ -327,6 +332,7 @@ class _EnforcerTabState extends State<EnforcerTab> {
                                           MainAxisAlignment.start,
                                       children: [
                                         TextFieldWidget(
+                                          textColor: primary,
                                           width: 175,
                                           label: 'Municipality/City',
                                           controller: cityController,
@@ -335,6 +341,7 @@ class _EnforcerTabState extends State<EnforcerTab> {
                                           width: 20,
                                         ),
                                         TextFieldWidget(
+                                          textColor: primary,
                                           width: 175,
                                           label: 'Province',
                                           controller: provinceController,
@@ -343,6 +350,7 @@ class _EnforcerTabState extends State<EnforcerTab> {
                                           width: 20,
                                         ),
                                         TextFieldWidget(
+                                          textColor: primary,
                                           width: 100,
                                           label: 'Sex',
                                           controller: sex,
@@ -370,6 +378,7 @@ class _EnforcerTabState extends State<EnforcerTab> {
                                           MainAxisAlignment.start,
                                       children: [
                                         TextFieldWidget(
+                                          textColor: primary,
                                           width: 125,
                                           label: 'Month',
                                           controller: monthController,
@@ -378,6 +387,7 @@ class _EnforcerTabState extends State<EnforcerTab> {
                                           width: 20,
                                         ),
                                         TextFieldWidget(
+                                          textColor: primary,
                                           inputType: TextInputType.number,
                                           width: 85,
                                           label: 'Day',
@@ -387,6 +397,7 @@ class _EnforcerTabState extends State<EnforcerTab> {
                                           width: 20,
                                         ),
                                         TextFieldWidget(
+                                          textColor: primary,
                                           inputType: TextInputType.number,
                                           width: 125,
                                           label: 'Year',
@@ -396,6 +407,7 @@ class _EnforcerTabState extends State<EnforcerTab> {
                                           width: 20,
                                         ),
                                         TextFieldWidget(
+                                          textColor: primary,
                                           inputType: TextInputType.number,
                                           width: 250,
                                           label: 'Birthplace',
@@ -433,6 +445,7 @@ class _EnforcerTabState extends State<EnforcerTab> {
                                           MainAxisAlignment.start,
                                       children: [
                                         TextFieldWidget(
+                                          textColor: primary,
                                           width: 200,
                                           label: 'Email',
                                           controller: email,
@@ -441,6 +454,7 @@ class _EnforcerTabState extends State<EnforcerTab> {
                                           width: 20,
                                         ),
                                         TextFieldWidget(
+                                          textColor: primary,
                                           isObscure: true,
                                           width: 200,
                                           label: 'Password',
@@ -452,6 +466,7 @@ class _EnforcerTabState extends State<EnforcerTab> {
                                       height: 10,
                                     ),
                                     TextFieldWidget(
+                                      textColor: primary,
                                       width: 200,
                                       label: 'Enforcer ID Number',
                                       controller: id,

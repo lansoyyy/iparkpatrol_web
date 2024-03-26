@@ -224,7 +224,13 @@ class _ParkingTabState extends State<ParkingTab> {
                                           content: Container(
                                             width: 750,
                                             height: 400,
-                                            color: Colors.grey,
+                                            decoration: const BoxDecoration(
+                                              image: DecorationImage(
+                                                  image: AssetImage(
+                                                    'assets/images/image 5.png',
+                                                  ),
+                                                  fit: BoxFit.cover),
+                                            ),
                                           ),
                                           actions: [
                                             TextButton(

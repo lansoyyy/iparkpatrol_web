@@ -113,7 +113,14 @@ class HomeTab extends StatelessWidget {
                                                 content: Container(
                                                   width: 750,
                                                   height: 400,
-                                                  color: Colors.grey,
+                                                  decoration:
+                                                      const BoxDecoration(
+                                                    image: DecorationImage(
+                                                        image: AssetImage(
+                                                          'assets/images/image 5.png',
+                                                        ),
+                                                        fit: BoxFit.cover),
+                                                  ),
                                                 ),
                                                 actions: [
                                                   TextButton(
@@ -133,7 +140,13 @@ class HomeTab extends StatelessWidget {
                                         child: Container(
                                           width: 500,
                                           height: 250,
-                                          color: Colors.grey,
+                                          decoration: const BoxDecoration(
+                                            image: DecorationImage(
+                                                image: AssetImage(
+                                                  'assets/images/image 5.png',
+                                                ),
+                                                fit: BoxFit.cover),
+                                          ),
                                         ),
                                       ),
                                       const SizedBox(
