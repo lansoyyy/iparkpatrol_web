@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:iparkpatrol_web/screens/home_screen.dart';
+import 'package:iparkpatrol_web/screens/login_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -12,7 +13,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
-      home: HomeScreen(),
+      home: LoginPage(),
     );
   }
 }
