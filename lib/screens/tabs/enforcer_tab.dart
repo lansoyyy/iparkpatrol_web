@@ -41,6 +41,8 @@ class _EnforcerTabState extends State<EnforcerTab> {
   final name = TextEditingController();
   final address = TextEditingController();
   final bday = TextEditingController();
+  final bloodtype = TextEditingController();
+  final status = TextEditingController();
 
   bool inCreated = false;
   @override
@@ -180,10 +182,45 @@ class _EnforcerTabState extends State<EnforcerTab> {
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
                                       children: [
-                                        Icon(
-                                          Icons.account_circle,
-                                          color: primary,
-                                          size: 150,
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            const SizedBox(
+                                              width: 50,
+                                            ),
+                                            Icon(
+                                              Icons.account_circle,
+                                              color: primary,
+                                              size: 125,
+                                            ),
+                                            Align(
+                                              alignment: Alignment.topRight,
+                                              child: PopupMenuButton(
+                                                itemBuilder: (context) {
+                                                  return [
+                                                    PopupMenuItem(
+                                                      onTap: () {
+                                                        showInfoDialog();
+                                                      },
+                                                      child: TextWidget(
+                                                        text: 'Edit info',
+                                                        fontSize: 12,
+                                                      ),
+                                                    ),
+                                                    PopupMenuItem(
+                                                      child: TextWidget(
+                                                        text: 'Remove enforcer',
+                                                        fontSize: 12,
+                                                      ),
+                                                    ),
+                                                  ];
+                                                },
+                                              ),
+                                            ),
+                                          ],
                                         ),
                                         const SizedBox(
                                           height: 10,
@@ -533,5 +570,183 @@ class _EnforcerTabState extends State<EnforcerTab> {
     } else {
       return null;
     }
+  }
+
+  showInfoDialog() {
+    return showDialog(
+      context: context,
+      builder: (context) {
+        return Dialog(
+          child: SizedBox(
+            height: 500,
+            width: 700,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.account_circle,
+                  color: primary,
+                  size: 100,
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    TextFieldWidget(
+                      width: 250,
+                      textColor: Colors.black,
+                      controller: name,
+                      label: 'Name',
+                    ),
+                    const SizedBox(
+                      width: 20,
+                    ),
+                    TextFieldWidget(
+                      width: 250,
+                      textColor: Colors.black,
+                      controller: address,
+                      label: 'Address',
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            TextFieldWidget(
+                              width: 150,
+                              textColor: Colors.black,
+                              controller: monthController,
+                              label: 'Birthdate',
+                            ),
+                            const SizedBox(
+                              width: 20,
+                            ),
+                            TextFieldWidget(
+                              width: 150,
+                              textColor: Colors.black,
+                              controller: sex,
+                              label: 'Sex',
+                            ),
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            TextFieldWidget(
+                              width: 150,
+                              textColor: Colors.black,
+                              controller: bloodtype,
+                              label: 'Bloodtype',
+                            ),
+                            const SizedBox(
+                              width: 20,
+                            ),
+                            TextFieldWidget(
+                              width: 150,
+                              textColor: Colors.black,
+                              controller: status,
+                              label: 'Status',
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                    const SizedBox(
+                      width: 20,
+                    ),
+                    Container(
+                      width: 250,
+                      height: 150,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        border: Border.all(
+                          color: primary,
+                        ),
+                        borderRadius: BorderRadius.circular(
+                          15,
+                        ),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            TextWidget(
+                              text: 'Documents',
+                              fontSize: 14,
+                              color: primary,
+                              fontFamily: 'Bold',
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            Container(
+                              width: 225,
+                              height: 40,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                border: Border.all(
+                                  color: primary,
+                                ),
+                                borderRadius: BorderRadius.circular(
+                                  5,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            Container(
+                              width: 225,
+                              height: 40,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                border: Border.all(
+                                  color: primary,
+                                ),
+                                borderRadius: BorderRadius.circular(
+                                  5,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 50,
+                ),
+                ButtonWidget(
+                  width: 150,
+                  color: primary,
+                  fontSize: 14,
+                  label: 'Apply Changes',
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
   }
 }
