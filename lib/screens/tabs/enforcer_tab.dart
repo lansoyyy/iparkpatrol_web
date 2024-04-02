@@ -77,73 +77,100 @@ class _EnforcerTabState extends State<EnforcerTab> {
                   const Expanded(
                     child: SizedBox(),
                   ),
-                  Container(
-                    decoration: BoxDecoration(
-                      color: primary,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: TextButton.icon(
-                      onPressed: () {
-                        setState(() {
-                          inCreated = true;
-                        });
-                      },
-                      icon: const Icon(
-                        Icons.person,
-                        color: Colors.white,
-                      ),
-                      label: TextWidget(
-                        text: 'Register an Enforcer',
-                        fontSize: 12,
-                        color: Colors.white,
-                        fontFamily: 'Bold',
-                      ),
-                    ),
-                  ),
+                  !inCreated
+                      ? Container(
+                          decoration: BoxDecoration(
+                            color: primary,
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: TextButton.icon(
+                            onPressed: () {
+                              setState(() {
+                                inCreated = true;
+                              });
+                            },
+                            icon: const Icon(
+                              Icons.person,
+                              color: Colors.white,
+                            ),
+                            label: TextWidget(
+                              text: 'Register an Enforcer',
+                              fontSize: 12,
+                              color: Colors.white,
+                              fontFamily: 'Bold',
+                            ),
+                          ),
+                        )
+                      : Container(
+                          decoration: BoxDecoration(
+                            color: primary,
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: TextButton.icon(
+                            onPressed: () {
+                              setState(() {
+                                inCreated = false;
+                              });
+                            },
+                            icon: const Icon(
+                              Icons.arrow_back,
+                              color: Colors.white,
+                            ),
+                            label: TextWidget(
+                              text: 'Back',
+                              fontSize: 12,
+                              color: Colors.white,
+                              fontFamily: 'Bold',
+                            ),
+                          ),
+                        ),
                   const SizedBox(
                     width: 20,
                   ),
-                  Align(
-                    alignment: Alignment.topRight,
-                    child: Container(
-                      height: 40,
-                      width: 200,
-                      decoration: BoxDecoration(
-                          border: Border.all(
-                            color: primary,
+                  !inCreated
+                      ? Align(
+                          alignment: Alignment.topRight,
+                          child: Container(
+                            height: 40,
+                            width: 200,
+                            decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: primary,
+                                ),
+                                borderRadius: BorderRadius.circular(100)),
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.only(left: 10, right: 10),
+                              child: TextFormField(
+                                style: TextStyle(
+                                    color: primary,
+                                    fontFamily: 'Regular',
+                                    fontSize: 14),
+                                onChanged: (value) {
+                                  setState(() {
+                                    nameSearched = value;
+                                  });
+                                },
+                                decoration: InputDecoration(
+                                    border: InputBorder.none,
+                                    labelStyle: TextStyle(
+                                      color: primary,
+                                    ),
+                                    hintText: 'Search Enforcer',
+                                    hintStyle: TextStyle(
+                                      fontFamily: 'QRegular',
+                                      color: primary,
+                                    ),
+                                    prefixIcon: Icon(
+                                      Icons.search,
+                                      color: primary,
+                                    )),
+                                controller: searchController,
+                              ),
+                            ),
                           ),
-                          borderRadius: BorderRadius.circular(100)),
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 10, right: 10),
-                        child: TextFormField(
-                          style: TextStyle(
-                              color: primary,
-                              fontFamily: 'Regular',
-                              fontSize: 14),
-                          onChanged: (value) {
-                            setState(() {
-                              nameSearched = value;
-                            });
-                          },
-                          decoration: InputDecoration(
-                              border: InputBorder.none,
-                              labelStyle: TextStyle(
-                                color: primary,
-                              ),
-                              hintText: 'Search Enforcer',
-                              hintStyle: TextStyle(
-                                fontFamily: 'QRegular',
-                                color: primary,
-                              ),
-                              prefixIcon: Icon(
-                                Icons.search,
-                                color: primary,
-                              )),
-                          controller: searchController,
-                        ),
-                      ),
-                    ),
-                  ),
+                        )
+                      : const SizedBox(),
                 ],
               ),
               const SizedBox(
