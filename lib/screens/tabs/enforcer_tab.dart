@@ -1,9 +1,16 @@
+import 'dart:html';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:iparkpatrol_web/services/add_enforcer.dart';
 import 'package:iparkpatrol_web/utlis/colors.dart';
 import 'package:iparkpatrol_web/widgets/button_widget.dart';
 import 'package:iparkpatrol_web/widgets/text_widget.dart';
-
+import 'package:iparkpatrol_web/widgets/toast_widget.dart';
+import 'package:intl/intl.dart' show DateFormat, toBeginningOfSentenceCase;
 import '../../widgets/textfield_widget.dart';
 
 class EnforcerTab extends StatefulWidget {
@@ -45,6 +52,30 @@ class _EnforcerTabState extends State<EnforcerTab> {
   final status = TextEditingController();
 
   bool inCreated = false;
+
+  late String? imgUrl = '';
+
+  uploadToStorage() {
+    InputElement input = FileUploadInputElement() as InputElement
+      ..accept = 'image/*';
+    FirebaseStorage fs = FirebaseStorage.instance;
+    input.click();
+    input.onChange.listen((event) {
+      final file = input.files!.first;
+      final reader = FileReader();
+      reader.readAsDataUrl(file);
+      reader.onLoadEnd.listen((event) async {
+        var snapshot = await fs.ref().child('newfile').putBlob(file);
+        String downloadUrl = await snapshot.ref.getDownloadURL();
+        showToast('Uploaded Succesfully! Click update to see changes');
+
+        setState(() {
+          imgUrl = downloadUrl;
+        });
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -196,72 +227,124 @@ class _EnforcerTabState extends State<EnforcerTab> {
                               const SizedBox(
                                 height: 20,
                               ),
-                              SizedBox(
-                                height: 475,
-                                child: GridView.builder(
-                                  gridDelegate:
-                                      const SliverGridDelegateWithFixedCrossAxisCount(
-                                          crossAxisCount: 4),
-                                  itemBuilder: (context, index) {
-                                    return Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            const SizedBox(
-                                              width: 50,
-                                            ),
-                                            Icon(
-                                              Icons.account_circle,
-                                              color: primary,
-                                              size: 125,
-                                            ),
-                                            Align(
-                                              alignment: Alignment.topRight,
-                                              child: PopupMenuButton(
-                                                itemBuilder: (context) {
-                                                  return [
-                                                    PopupMenuItem(
-                                                      onTap: () {
-                                                        showInfoDialog();
+                              StreamBuilder<QuerySnapshot>(
+                                  stream: FirebaseFirestore.instance
+                                      .collection('Enforcers')
+                                      .where('fname',
+                                          isGreaterThanOrEqualTo:
+                                              toBeginningOfSentenceCase(
+                                                  nameSearched))
+                                      .where('fname',
+                                          isLessThan:
+                                              '${toBeginningOfSentenceCase(nameSearched)}z')
+                                      .snapshots(),
+                                  builder: (BuildContext context,
+                                      AsyncSnapshot<QuerySnapshot> snapshot) {
+                                    if (snapshot.hasError) {
+                                      print('error');
+                                      return const Center(child: Text('Error'));
+                                    }
+                                    if (snapshot.connectionState ==
+                                        ConnectionState.waiting) {
+                                      return const Padding(
+                                        padding: EdgeInsets.only(top: 50),
+                                        child: Center(
+                                            child: CircularProgressIndicator(
+                                          color: Colors.black,
+                                        )),
+                                      );
+                                    }
+
+                                    final data = snapshot.requireData;
+                                    return SizedBox(
+                                      height: 475,
+                                      child: GridView.builder(
+                                        itemCount: data.docs.length,
+                                        gridDelegate:
+                                            const SliverGridDelegateWithFixedCrossAxisCount(
+                                                crossAxisCount: 4),
+                                        itemBuilder: (context, index) {
+                                          return Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  const SizedBox(
+                                                    width: 50,
+                                                  ),
+                                                  CircleAvatar(
+                                                    minRadius: 50,
+                                                    maxRadius: 50,
+                                                    backgroundImage:
+                                                        NetworkImage(
+                                                            data.docs[index]
+                                                                ['img']),
+                                                  ),
+                                                  Align(
+                                                    alignment:
+                                                        Alignment.topRight,
+                                                    child: PopupMenuButton(
+                                                      itemBuilder: (context) {
+                                                        return [
+                                                          PopupMenuItem(
+                                                            onTap: () {
+                                                              showInfoDialog(
+                                                                  data.docs[
+                                                                      index]);
+                                                            },
+                                                            child: TextWidget(
+                                                              text: 'Edit info',
+                                                              fontSize: 12,
+                                                            ),
+                                                          ),
+                                                          PopupMenuItem(
+                                                            onTap: () async {
+                                                              await FirebaseFirestore
+                                                                  .instance
+                                                                  .collection(
+                                                                      'Enforcers')
+                                                                  .doc(data
+                                                                      .docs[
+                                                                          index]
+                                                                      .id)
+                                                                  .delete();
+                                                              showToast(
+                                                                  'Enforcer deleted succesfully!');
+                                                            },
+                                                            child: TextWidget(
+                                                              text:
+                                                                  'Remove enforcer',
+                                                              fontSize: 12,
+                                                            ),
+                                                          ),
+                                                        ];
                                                       },
-                                                      child: TextWidget(
-                                                        text: 'Edit info',
-                                                        fontSize: 12,
-                                                      ),
                                                     ),
-                                                    PopupMenuItem(
-                                                      child: TextWidget(
-                                                        text: 'Remove enforcer',
-                                                        fontSize: 12,
-                                                      ),
-                                                    ),
-                                                  ];
-                                                },
+                                                  ),
+                                                ],
                                               ),
-                                            ),
-                                          ],
-                                        ),
-                                        const SizedBox(
-                                          height: 10,
-                                        ),
-                                        TextWidget(
-                                          text: 'John Doe',
-                                          fontSize: 24,
-                                          color: primary,
-                                        ),
-                                      ],
+                                              const SizedBox(
+                                                height: 10,
+                                              ),
+                                              TextWidget(
+                                                text:
+                                                    '${data.docs[index]['name']}}',
+                                                fontSize: 24,
+                                                color: primary,
+                                              ),
+                                            ],
+                                          );
+                                        },
+                                      ),
                                     );
-                                  },
-                                ),
-                              ),
+                                  }),
                               const SizedBox(
                                 height: 50,
                               ),
@@ -339,7 +422,9 @@ class _EnforcerTabState extends State<EnforcerTab> {
                                               color: primary,
                                             ),
                                             TextButton(
-                                              onPressed: () {},
+                                              onPressed: () {
+                                                uploadToStorage();
+                                              },
                                               child: TextWidget(
                                                 text: 'Upload picture',
                                                 fontSize: 14,
@@ -551,9 +636,7 @@ class _EnforcerTabState extends State<EnforcerTab> {
                                     fontSize: 12,
                                     label: 'Submit',
                                     onPressed: () {
-                                      setState(() {
-                                        inCreated = false;
-                                      });
+                                      register(context);
                                     },
                                   ),
                                 ),
@@ -599,7 +682,59 @@ class _EnforcerTabState extends State<EnforcerTab> {
     }
   }
 
-  showInfoDialog() {
+  register(context) async {
+    try {
+      final user = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+          email: email.text, password: password.text);
+
+      // signup(nameController.text, numberController.text, addressController.text,
+      //     emailController.text);
+
+      addEnforcer(
+          user.user!.uid,
+          fnameController.text,
+          mnameController.text,
+          lnameController.text,
+          purokController.text,
+          brgyController.text,
+          cityController.text,
+          provinceController.text,
+          sex.text,
+          monthController.text,
+          dayController.text,
+          yearController.text,
+          birthplace.text,
+          email.text,
+          id.text,
+          imgUrl);
+
+      showToast("Registered Successfully!");
+
+      setState(() {
+        inCreated = false;
+      });
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'weak-password') {
+        showToast('The password provided is too weak.');
+      } else if (e.code == 'email-already-in-use') {
+        showToast('The account already exists for that email.');
+      } else if (e.code == 'invalid-email') {
+        showToast('The email address is not valid.');
+      } else {
+        showToast(e.toString());
+      }
+    } on Exception catch (e) {
+      showToast("An error occurred: $e");
+    }
+  }
+
+  showInfoDialog(data) {
+    setState(() {
+      name.text = data['name'];
+      address.text = data['address'];
+      monthController.text = data['birthdate'];
+      sex.text = data['sex'];
+    });
     return showDialog(
       context: context,
       builder: (context) {
@@ -664,29 +799,6 @@ class _EnforcerTabState extends State<EnforcerTab> {
                               textColor: Colors.black,
                               controller: sex,
                               label: 'Sex',
-                            ),
-                          ],
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            TextFieldWidget(
-                              width: 150,
-                              textColor: Colors.black,
-                              controller: bloodtype,
-                              label: 'Bloodtype',
-                            ),
-                            const SizedBox(
-                              width: 20,
-                            ),
-                            TextFieldWidget(
-                              width: 150,
-                              textColor: Colors.black,
-                              controller: status,
-                              label: 'Status',
                             ),
                           ],
                         ),
@@ -765,7 +877,16 @@ class _EnforcerTabState extends State<EnforcerTab> {
                   color: primary,
                   fontSize: 14,
                   label: 'Apply Changes',
-                  onPressed: () {
+                  onPressed: () async {
+                    await FirebaseFirestore.instance
+                        .collection('Enforcers')
+                        .doc(data.id)
+                        .update({
+                      'name': name.text,
+                      'address': address.text,
+                      'birthdate': monthController.text,
+                      'sex': sex.text
+                    });
                     Navigator.pop(context);
                   },
                 ),
