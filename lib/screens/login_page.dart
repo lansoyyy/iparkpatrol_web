@@ -3,6 +3,7 @@ import 'package:iparkpatrol_web/screens/home_screen.dart';
 import 'package:iparkpatrol_web/utlis/colors.dart';
 import 'package:iparkpatrol_web/widgets/button_widget.dart';
 import 'package:iparkpatrol_web/widgets/textfield_widget.dart';
+import 'package:iparkpatrol_web/widgets/toast_widget.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -35,6 +36,7 @@ class _LoginPageState extends State<LoginPage> {
                 height: 75,
               ),
               TextFieldWidget(
+                textColor: Colors.black,
                 borderColor: primary,
                 label: 'Admin ID Number',
                 controller: emailController,
@@ -43,6 +45,7 @@ class _LoginPageState extends State<LoginPage> {
                 height: 20,
               ),
               TextFieldWidget(
+                textColor: Colors.black,
                 isObscure: true,
                 borderColor: primary,
                 label: 'Password',
@@ -58,8 +61,13 @@ class _LoginPageState extends State<LoginPage> {
                 width: 175,
                 label: 'Sign In',
                 onPressed: () {
-                  Navigator.of(context).pushReplacement(MaterialPageRoute(
-                      builder: (context) => const HomeScreen()));
+                  if (emailController.text == '12345' ||
+                      passwordController.text == 'admin12345') {
+                    Navigator.of(context).pushReplacement(MaterialPageRoute(
+                        builder: (context) => const HomeScreen()));
+                  } else {
+                    showToast('Invalid admin credentials!');
+                  }
                 },
               ),
               const SizedBox(
