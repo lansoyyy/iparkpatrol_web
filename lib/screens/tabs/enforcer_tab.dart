@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 import 'package:iparkpatrol_web/services/add_enforcer.dart';
 import 'package:iparkpatrol_web/utlis/colors.dart';
@@ -65,9 +66,10 @@ class _EnforcerTabState extends State<EnforcerTab> {
       final reader = FileReader();
       reader.readAsDataUrl(file);
       reader.onLoadEnd.listen((event) async {
-        var snapshot = await fs.ref().child('newfile').putBlob(file);
+        var snapshot =
+            await fs.ref().child(DateTime.now().toString()).putBlob(file);
         String downloadUrl = await snapshot.ref.getDownloadURL();
-        showToast('Uploaded Succesfully! Click update to see changes');
+        showToast('Uploaded Succesfully');
 
         setState(() {
           imgUrl = downloadUrl;
@@ -282,10 +284,8 @@ class _EnforcerTabState extends State<EnforcerTab> {
                                                   CircleAvatar(
                                                     minRadius: 50,
                                                     maxRadius: 50,
-                                                    backgroundImage:
-                                                        NetworkImage(
-                                                            data.docs[index]
-                                                                ['img']),
+                                                    child: Image.network(data
+                                                        .docs[index]['img']),
                                                   ),
                                                   Align(
                                                     alignment:
@@ -335,7 +335,7 @@ class _EnforcerTabState extends State<EnforcerTab> {
                                               ),
                                               TextWidget(
                                                 text:
-                                                    '${data.docs[index]['name']}}',
+                                                    '${data.docs[index]['name']}',
                                                 fontSize: 24,
                                                 color: primary,
                                               ),
@@ -360,6 +360,34 @@ class _EnforcerTabState extends State<EnforcerTab> {
                           padding: const EdgeInsets.all(10.0),
                           child: Column(
                             children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  imgUrl == ''
+                                      ? Icon(
+                                          Icons.account_circle,
+                                          size: 150,
+                                          color: primary,
+                                        )
+                                      : CircleAvatar(
+                                          minRadius: 50,
+                                          maxRadius: 50,
+                                          child: Image.network(imgUrl!),
+                                        ),
+                                  TextButton(
+                                    onPressed: () {
+                                      uploadToStorage();
+                                    },
+                                    child: TextWidget(
+                                      text: 'Change Profile Picture',
+                                      fontSize: 14,
+                                      color: primary,
+                                      fontFamily: 'Bold',
+                                    ),
+                                  ),
+                                ],
+                              ),
                               Padding(
                                 padding:
                                     const EdgeInsets.only(left: 15, right: 15),
@@ -410,30 +438,6 @@ class _EnforcerTabState extends State<EnforcerTab> {
                                         const SizedBox(
                                           width: 100,
                                         ),
-                                        Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            Icon(
-                                              Icons.account_circle,
-                                              size: 150,
-                                              color: primary,
-                                            ),
-                                            TextButton(
-                                              onPressed: () {
-                                                uploadToStorage();
-                                              },
-                                              child: TextWidget(
-                                                text: 'Upload picture',
-                                                fontSize: 14,
-                                                color: primary,
-                                                fontFamily: 'Bold',
-                                              ),
-                                            ),
-                                          ],
-                                        )
                                       ],
                                     ),
                                     const SizedBox(
@@ -526,31 +530,49 @@ class _EnforcerTabState extends State<EnforcerTab> {
                                       mainAxisAlignment:
                                           MainAxisAlignment.start,
                                       children: [
-                                        TextFieldWidget(
-                                          textColor: primary,
-                                          width: 125,
-                                          label: 'Month',
-                                          controller: monthController,
+                                        GestureDetector(
+                                          onTap: () {
+                                            dateFromPicker(context);
+                                          },
+                                          child: TextFieldWidget(
+                                            isEnabled: false,
+                                            textColor: primary,
+                                            width: 125,
+                                            label: 'Month',
+                                            controller: monthController,
+                                          ),
                                         ),
                                         const SizedBox(
                                           width: 20,
                                         ),
-                                        TextFieldWidget(
-                                          textColor: primary,
-                                          inputType: TextInputType.number,
-                                          width: 85,
-                                          label: 'Day',
-                                          controller: dayController,
+                                        GestureDetector(
+                                          onTap: () {
+                                            dateFromPicker(context);
+                                          },
+                                          child: TextFieldWidget(
+                                            isEnabled: false,
+                                            textColor: primary,
+                                            inputType: TextInputType.number,
+                                            width: 85,
+                                            label: 'Day',
+                                            controller: dayController,
+                                          ),
                                         ),
                                         const SizedBox(
                                           width: 20,
                                         ),
-                                        TextFieldWidget(
-                                          textColor: primary,
-                                          inputType: TextInputType.number,
-                                          width: 125,
-                                          label: 'Year',
-                                          controller: yearController,
+                                        GestureDetector(
+                                          onTap: () {
+                                            dateFromPicker(context);
+                                          },
+                                          child: TextFieldWidget(
+                                            isEnabled: false,
+                                            textColor: primary,
+                                            inputType: TextInputType.number,
+                                            width: 125,
+                                            label: 'Year',
+                                            controller: yearController,
+                                          ),
                                         ),
                                         const SizedBox(
                                           width: 20,
@@ -676,6 +698,9 @@ class _EnforcerTabState extends State<EnforcerTab> {
 
       setState(() {
         dateController.text = formattedDate;
+        yearController.text = formattedDate.split('-')[0];
+        monthController.text = formattedDate.split('-')[1];
+        dayController.text = formattedDate.split('-')[2];
       });
     } else {
       return null;
