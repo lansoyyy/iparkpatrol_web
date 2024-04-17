@@ -436,6 +436,15 @@ class _EnforcerTabState extends State<EnforcerTab> {
                                           controller: lnameController,
                                         ),
                                         const SizedBox(
+                                          width: 20,
+                                        ),
+                                        TextFieldWidget(
+                                          textColor: primary,
+                                          width: 100,
+                                          label: 'Gender',
+                                          controller: sex,
+                                        ),
+                                        const SizedBox(
                                           width: 100,
                                         ),
                                       ],
@@ -475,15 +484,9 @@ class _EnforcerTabState extends State<EnforcerTab> {
                                           label: 'Barangay',
                                           controller: brgyController,
                                         ),
-                                      ],
-                                    ),
-                                    const SizedBox(
-                                      height: 10,
-                                    ),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: [
+                                        const SizedBox(
+                                          width: 20,
+                                        ),
                                         TextFieldWidget(
                                           textColor: primary,
                                           width: 175,
@@ -499,16 +502,10 @@ class _EnforcerTabState extends State<EnforcerTab> {
                                           label: 'Province',
                                           controller: provinceController,
                                         ),
-                                        const SizedBox(
-                                          width: 20,
-                                        ),
-                                        TextFieldWidget(
-                                          textColor: primary,
-                                          width: 100,
-                                          label: 'Sex',
-                                          controller: sex,
-                                        ),
                                       ],
+                                    ),
+                                    const SizedBox(
+                                      height: 10,
                                     ),
                                     const SizedBox(
                                       height: 20,
@@ -631,16 +628,16 @@ class _EnforcerTabState extends State<EnforcerTab> {
                                           label: 'Password',
                                           controller: password,
                                         ),
+                                        const SizedBox(
+                                          width: 20,
+                                        ),
+                                        TextFieldWidget(
+                                          textColor: primary,
+                                          width: 200,
+                                          label: 'Enforcer ID Number',
+                                          controller: id,
+                                        ),
                                       ],
-                                    ),
-                                    const SizedBox(
-                                      height: 10,
-                                    ),
-                                    TextFieldWidget(
-                                      textColor: primary,
-                                      width: 200,
-                                      label: 'Enforcer ID Number',
-                                      controller: id,
                                     ),
                                   ],
                                 ),
