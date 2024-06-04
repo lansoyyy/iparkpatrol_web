@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:iparkpatrol_web/utlis/colors.dart';
@@ -127,140 +128,168 @@ class _ParkingTabState extends State<ParkingTab> {
               const SizedBox(
                 height: 10,
               ),
-              Container(
-                  width: 1000,
-                  height: 525,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: SingleChildScrollView(
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
-                      child: Column(
-                        children: [
-                          DataTable(columnSpacing: 100, columns: [
-                            DataColumn(
-                              label: TextWidget(
-                                text: '#',
-                                fontSize: 18,
-                                fontFamily: 'Bold',
-                                color: primary,
-                              ),
-                            ),
-                            DataColumn(
-                              label: TextWidget(
-                                text: 'Time',
-                                fontSize: 18,
-                                fontFamily: 'Bold',
-                                color: primary,
-                              ),
-                            ),
-                            DataColumn(
-                              label: TextWidget(
-                                text: 'Date',
-                                fontSize: 18,
-                                fontFamily: 'Bold',
-                                color: primary,
-                              ),
-                            ),
-                            DataColumn(
-                              label: TextWidget(
-                                text: 'NPS Area',
-                                fontSize: 18,
-                                fontFamily: 'Bold',
-                                color: primary,
-                              ),
-                            ),
-                            DataColumn(
-                              label: TextWidget(
-                                text: 'Option',
-                                fontSize: 18,
-                                fontFamily: 'Bold',
-                                color: primary,
-                              ),
-                            ),
-                          ], rows: [
-                            for (int i = 0; i < 50; i++)
-                              DataRow(cells: [
-                                DataCell(
-                                  TextWidget(
-                                    text: '2024-0003',
-                                    fontSize: 14,
-                                    color: primary,
+              StreamBuilder<QuerySnapshot>(
+                  stream: FirebaseFirestore.instance
+                      .collection('illegal_parking')
+                      .where('status', isEqualTo: 'Resolved')
+                      .snapshots(),
+                  builder: (BuildContext context,
+                      AsyncSnapshot<QuerySnapshot> snapshot) {
+                    if (snapshot.hasError) {
+                      print(snapshot.error);
+                      return const Center(child: Text('Error'));
+                    }
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Padding(
+                        padding: EdgeInsets.only(top: 50),
+                        child: Center(
+                            child: CircularProgressIndicator(
+                          color: Colors.black,
+                        )),
+                      );
+                    }
+
+                    final data = snapshot.requireData;
+                    return Container(
+                        width: 1000,
+                        height: 525,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: SingleChildScrollView(
+                          child: Padding(
+                            padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
+                            child: Column(
+                              children: [
+                                DataTable(columnSpacing: 100, columns: [
+                                  DataColumn(
+                                    label: TextWidget(
+                                      text: '#',
+                                      fontSize: 18,
+                                      fontFamily: 'Bold',
+                                      color: primary,
+                                    ),
                                   ),
-                                ),
-                                DataCell(
-                                  TextWidget(
-                                    text: DateFormat('hh:mm a')
-                                        .format(DateTime.now()),
-                                    fontSize: 14,
-                                    color: primary,
-                                    fontFamily: 'Bold',
+                                  DataColumn(
+                                    label: TextWidget(
+                                      text: 'Time',
+                                      fontSize: 18,
+                                      fontFamily: 'Bold',
+                                      color: primary,
+                                    ),
                                   ),
-                                ),
-                                DataCell(
-                                  TextWidget(
-                                    text: DateFormat('yyyy-MM-dd')
-                                        .format(DateTime.now()),
-                                    fontSize: 14,
-                                    color: primary,
-                                    fontFamily: 'Bold',
+                                  DataColumn(
+                                    label: TextWidget(
+                                      text: 'Date',
+                                      fontSize: 18,
+                                      fontFamily: 'Bold',
+                                      color: primary,
+                                    ),
                                   ),
-                                ),
-                                DataCell(
-                                  TextWidget(
-                                    text: 'NPS - Divisoria',
-                                    fontSize: 14,
-                                    color: primary,
-                                    fontFamily: 'Bold',
+                                  DataColumn(
+                                    label: TextWidget(
+                                      text: 'NPS Area',
+                                      fontSize: 18,
+                                      fontFamily: 'Bold',
+                                      color: primary,
+                                    ),
                                   ),
-                                ),
-                                DataCell(TextButton(
-                                  onPressed: () {
-                                    showDialog(
-                                      context: context,
-                                      builder: (context) {
-                                        return AlertDialog(
-                                          content: Container(
-                                            width: 750,
-                                            height: 400,
-                                            decoration: const BoxDecoration(
-                                              image: DecorationImage(
-                                                  image: AssetImage(
-                                                    'assets/images/image 5.png',
+                                  DataColumn(
+                                    label: TextWidget(
+                                      text: 'Option',
+                                      fontSize: 18,
+                                      fontFamily: 'Bold',
+                                      color: primary,
+                                    ),
+                                  ),
+                                ], rows: [
+                                  for (int i = 0; i < data.docs.length; i++)
+                                    DataRow(cells: [
+                                      DataCell(
+                                        TextWidget(
+                                          text: '2024-${i + 1}',
+                                          fontSize: 14,
+                                          color: primary,
+                                        ),
+                                      ),
+                                      DataCell(
+                                        TextWidget(
+                                          text: DateFormat('hh:mm a').format(
+                                              DateTime.parse(data.docs[i].id
+                                                  .split('_')[0])),
+                                          fontSize: 14,
+                                          fontFamily: 'Bold',
+                                          color: primary,
+                                        ),
+                                      ),
+                                      DataCell(
+                                        TextWidget(
+                                          text: DateFormat('MMMM dd, yyyy')
+                                              .format(DateTime.parse(data
+                                                  .docs[i].id
+                                                  .split('_')[0])),
+                                          fontSize: 14,
+                                          fontFamily: 'Bold',
+                                          color: primary,
+                                        ),
+                                      ),
+                                      DataCell(
+                                        TextWidget(
+                                          text:
+                                              '${data.docs[i]['location']} - ${data.docs[i]['title_of_violation']}',
+                                          fontSize: 14,
+                                          color: primary,
+                                          fontFamily: 'Bold',
+                                        ),
+                                      ),
+                                      DataCell(TextButton(
+                                        onPressed: () {
+                                          showDialog(
+                                            context: context,
+                                            builder: (context) {
+                                              return AlertDialog(
+                                                content: Container(
+                                                  width: 750,
+                                                  height: 400,
+                                                  decoration: BoxDecoration(
+                                                    image: DecorationImage(
+                                                        image: NetworkImage(
+                                                          data.docs[i]
+                                                              ['image_url'],
+                                                        ),
+                                                        fit: BoxFit.cover),
                                                   ),
-                                                  fit: BoxFit.cover),
-                                            ),
-                                          ),
-                                          actions: [
-                                            TextButton(
-                                              onPressed: () {
-                                                Navigator.pop(context);
-                                              },
-                                              child: TextWidget(
-                                                text: 'Close',
-                                                fontSize: 18,
-                                              ),
-                                            ),
-                                          ],
-                                        );
-                                      },
-                                    );
-                                  },
-                                  child: TextWidget(
-                                    text: 'View Image',
-                                    decoration: TextDecoration.underline,
-                                    fontSize: 14,
-                                    color: primary,
-                                    fontFamily: 'Bold',
-                                  ),
-                                )),
-                              ])
-                          ])
-                        ],
-                      ),
-                    ),
-                  ))
+                                                ),
+                                                actions: [
+                                                  TextButton(
+                                                    onPressed: () {
+                                                      Navigator.pop(context);
+                                                    },
+                                                    child: TextWidget(
+                                                      text: 'Close',
+                                                      fontSize: 18,
+                                                    ),
+                                                  ),
+                                                ],
+                                              );
+                                            },
+                                          );
+                                        },
+                                        child: TextWidget(
+                                          text: 'View Image',
+                                          decoration: TextDecoration.underline,
+                                          fontSize: 14,
+                                          color: primary,
+                                          fontFamily: 'Bold',
+                                        ),
+                                      )),
+                                    ])
+                                ])
+                              ],
+                            ),
+                          ),
+                        ));
+                  })
             ],
           ),
         ),

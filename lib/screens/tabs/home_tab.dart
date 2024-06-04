@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:iparkpatrol_web/utlis/colors.dart';
@@ -35,40 +36,6 @@ class HomeTab extends StatelessWidget {
                     fontFamily: 'Bold',
                     color: primary,
                   ),
-                  Container(
-                    decoration: BoxDecoration(
-                      color: primary,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 10, right: 10),
-                      child: DropdownButton<String>(
-                        iconEnabledColor: Colors.white,
-                        iconDisabledColor: primary,
-                        underline: const SizedBox(),
-                        items: <String>['Option 1', 'Option 2', 'Option 3']
-                            .map((String value) {
-                          return DropdownMenuItem<String>(
-                            value: value,
-                            child: Text(value),
-                          );
-                        }).toList(),
-                        onChanged: (String? value) {
-                          // Handle dropdown value change
-                          print('Selected: $value');
-                        },
-                        hint: const Text(
-                          'Select an option',
-                          style: TextStyle(
-                            fontFamily: 'Bold',
-                            color: Colors.white,
-                            fontSize: 14,
-                          ),
-                        ),
-                        // value: 'Option 1', // Set a default value
-                      ),
-                    ),
-                  ),
                 ],
               ),
               const SizedBox(
@@ -81,126 +48,169 @@ class HomeTab extends StatelessWidget {
               const SizedBox(
                 height: 10,
               ),
-              Container(
-                  width: 1000,
-                  height: 525,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: SingleChildScrollView(
-                    child: Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: Column(
-                        children: [
-                          for (int i = 0; i < 5; i++)
-                            Padding(
-                              padding: const EdgeInsets.only(top: 5, bottom: 5),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      GestureDetector(
-                                        onTap: () {
-                                          showDialog(
-                                            context: context,
-                                            builder: (context) {
-                                              return AlertDialog(
-                                                content: Container(
-                                                  width: 750,
-                                                  height: 400,
-                                                  decoration:
-                                                      const BoxDecoration(
-                                                    image: DecorationImage(
-                                                        image: AssetImage(
-                                                          'assets/images/image 5.png',
-                                                        ),
-                                                        fit: BoxFit.cover),
-                                                  ),
-                                                ),
-                                                actions: [
-                                                  TextButton(
-                                                    onPressed: () {
-                                                      Navigator.pop(context);
-                                                    },
-                                                    child: TextWidget(
-                                                      text: 'Close',
-                                                      fontSize: 18,
-                                                    ),
-                                                  ),
-                                                ],
-                                              );
-                                            },
-                                          );
-                                        },
-                                        child: Container(
-                                          width: 500,
-                                          height: 250,
-                                          decoration: const BoxDecoration(
-                                            image: DecorationImage(
-                                                image: AssetImage(
-                                                  'assets/images/image 5.png',
-                                                ),
-                                                fit: BoxFit.cover),
-                                          ),
-                                        ),
-                                      ),
-                                      const SizedBox(
-                                        width: 20,
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.only(top: 20),
-                                        child: Column(
+              StreamBuilder<QuerySnapshot>(
+                  stream: FirebaseFirestore.instance
+                      .collection('illegal_parking')
+                      .where('status', isEqualTo: 'Pending')
+                      .snapshots(),
+                  builder: (BuildContext context,
+                      AsyncSnapshot<QuerySnapshot> snapshot) {
+                    if (snapshot.hasError) {
+                      print(snapshot.error);
+                      return const Center(child: Text('Error'));
+                    }
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Padding(
+                        padding: EdgeInsets.only(top: 50),
+                        child: Center(
+                            child: CircularProgressIndicator(
+                          color: Colors.black,
+                        )),
+                      );
+                    }
+
+                    final data = snapshot.requireData;
+                    return Container(
+                        width: 1000,
+                        height: 525,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: SingleChildScrollView(
+                          child: Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: Column(
+                              children: [
+                                for (int i = 0; i < data.docs.length; i++)
+                                  Padding(
+                                    padding: const EdgeInsets.only(
+                                        top: 5, bottom: 5),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        Row(
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
                                           mainAxisAlignment:
                                               MainAxisAlignment.start,
                                           children: [
-                                            TextWidget(
-                                              text: DateFormat('hh:mm a')
-                                                  .format(DateTime.now()),
-                                              fontSize: 14,
-                                              fontFamily: 'Bold',
-                                              color: primary,
-                                            ),
-                                            TextWidget(
-                                              text: DateFormat('MMMM dd, yyyy')
-                                                  .format(DateTime.now()),
-                                              fontSize: 16,
-                                              fontFamily: 'Bold',
-                                              color: primary,
+                                            GestureDetector(
+                                              onTap: () {
+                                                showDialog(
+                                                  context: context,
+                                                  builder: (context) {
+                                                    return AlertDialog(
+                                                      content: Container(
+                                                        width: 750,
+                                                        height: 400,
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          image:
+                                                              DecorationImage(
+                                                                  image:
+                                                                      NetworkImage(
+                                                                    data.docs[i]
+                                                                        [
+                                                                        'image_url'],
+                                                                  ),
+                                                                  fit: BoxFit
+                                                                      .cover),
+                                                        ),
+                                                      ),
+                                                      actions: [
+                                                        TextButton(
+                                                          onPressed: () {
+                                                            Navigator.pop(
+                                                                context);
+                                                          },
+                                                          child: TextWidget(
+                                                            text: 'Close',
+                                                            fontSize: 18,
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    );
+                                                  },
+                                                );
+                                              },
+                                              child: Container(
+                                                width: 500,
+                                                height: 250,
+                                                decoration: BoxDecoration(
+                                                  image: DecorationImage(
+                                                      image: NetworkImage(
+                                                        data.docs[i]
+                                                            ['image_url'],
+                                                      ),
+                                                      fit: BoxFit.cover),
+                                                ),
+                                              ),
                                             ),
                                             const SizedBox(
-                                              height: 10,
+                                              width: 20,
                                             ),
-                                            TextWidget(
-                                              text: 'Divisoria No Parking Area',
-                                              fontSize: 18,
-                                              fontFamily: 'Medium',
-                                              color: primary,
+                                            Padding(
+                                              padding: const EdgeInsets.only(
+                                                  top: 20),
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.start,
+                                                children: [
+                                                  TextWidget(
+                                                    text: DateFormat('hh:mm a')
+                                                        .format(DateTime.parse(
+                                                            data.docs[i].id
+                                                                .split(
+                                                                    '_')[0])),
+                                                    fontSize: 14,
+                                                    fontFamily: 'Bold',
+                                                    color: primary,
+                                                  ),
+                                                  TextWidget(
+                                                    text: DateFormat(
+                                                            'MMMM dd, yyyy')
+                                                        .format(DateTime.parse(
+                                                            data.docs[i].id
+                                                                .split(
+                                                                    '_')[0])),
+                                                    fontSize: 16,
+                                                    fontFamily: 'Bold',
+                                                    color: primary,
+                                                  ),
+                                                  const SizedBox(
+                                                    height: 10,
+                                                  ),
+                                                  TextWidget(
+                                                    text:
+                                                        '${data.docs[i]['location']} - ${data.docs[i]['title_of_violation']}',
+                                                    fontSize: 18,
+                                                    fontFamily: 'Medium',
+                                                    color: primary,
+                                                  ),
+                                                ],
+                                              ),
                                             ),
                                           ],
                                         ),
-                                      ),
-                                    ],
+                                        const SizedBox(
+                                          height: 5,
+                                        ),
+                                        const Divider(
+                                          color: Colors.white,
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                  const SizedBox(
-                                    height: 5,
-                                  ),
-                                  const Divider(
-                                    color: Colors.white,
-                                  ),
-                                ],
-                              ),
+                              ],
                             ),
-                        ],
-                      ),
-                    ),
-                  ))
+                          ),
+                        ));
+                  })
             ],
           ),
         ),
