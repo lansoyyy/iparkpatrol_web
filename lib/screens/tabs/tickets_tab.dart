@@ -14,6 +14,8 @@ class TicketsTab extends StatefulWidget {
 class _TicketsTabState extends State<TicketsTab> {
   final dateController = TextEditingController(
       text: DateFormat('yyyy-MM-dd').format(DateTime.now()));
+
+  DateTime? selectedDate;
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -34,11 +36,89 @@ class _TicketsTabState extends State<TicketsTab> {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              TextWidget(
-                text: 'Illegal Parking History',
-                fontSize: 24,
-                fontFamily: 'Bold',
-                color: primary,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  TextWidget(
+                    text: 'Citation Tickets',
+                    fontSize: 24,
+                    fontFamily: 'Bold',
+                    color: primary,
+                  ),
+                  Align(
+                    alignment: Alignment.topRight,
+                    child: SizedBox(
+                      width: 150,
+                      height: 50,
+                      child: GestureDetector(
+                        onTap: () {
+                          dateFromPicker(context);
+                        },
+                        child: SizedBox(
+                          width: 325,
+                          height: 50,
+                          child: TextFormField(
+                            enabled: false,
+                            style: TextStyle(
+                              fontFamily: 'Regular',
+                              fontSize: 14,
+                              color: primary,
+                            ),
+
+                            decoration: InputDecoration(
+                              suffixIcon: const Icon(
+                                Icons.calendar_month_outlined,
+                                color: Colors.white,
+                              ),
+                              hintStyle: TextStyle(
+                                fontFamily: 'Regular',
+                                fontSize: 14,
+                                color: primary,
+                              ),
+                              hintText: dateController.text,
+                              border: InputBorder.none,
+                              disabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: primary,
+                                ),
+                                borderRadius: BorderRadius.circular(5),
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: primary,
+                                ),
+                                borderRadius: BorderRadius.circular(5),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: primary,
+                                ),
+                                borderRadius: BorderRadius.circular(5),
+                              ),
+                              errorBorder: OutlineInputBorder(
+                                borderSide: const BorderSide(
+                                  color: Colors.red,
+                                ),
+                                borderRadius: BorderRadius.circular(5),
+                              ),
+                              errorStyle: const TextStyle(
+                                  fontFamily: 'Bold', fontSize: 12),
+                              focusedErrorBorder: OutlineInputBorder(
+                                borderSide: const BorderSide(
+                                  color: Colors.red,
+                                ),
+                                borderRadius: BorderRadius.circular(5),
+                              ),
+                            ),
+
+                            controller: dateController,
+                            // Pass the validator to the TextFormField
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
               const SizedBox(
                 height: 10,
@@ -71,7 +151,17 @@ class _TicketsTabState extends State<TicketsTab> {
                       );
                     }
 
-                    final data = snapshot.requireData;
+                    final data = snapshot.requireData.docs;
+                    List<QueryDocumentSnapshot> filteredData = data;
+
+                    if (selectedDate != null) {
+                      filteredData = data.where((doc) {
+                        DateTime timestamp = parseTimestamp(doc['timestamp']);
+                        return timestamp.year == selectedDate!.year &&
+                            timestamp.month == selectedDate!.month &&
+                            timestamp.day == selectedDate!.day;
+                      }).toList();
+                    }
                     return Container(
                         width: 1000,
                         height: 550,
@@ -83,86 +173,6 @@ class _TicketsTabState extends State<TicketsTab> {
                             padding: const EdgeInsets.all(10.0),
                             child: Column(
                               children: [
-                                Align(
-                                  alignment: Alignment.topRight,
-                                  child: SizedBox(
-                                    width: 150,
-                                    height: 50,
-                                    child: GestureDetector(
-                                      onTap: () {
-                                        dateFromPicker(context);
-                                      },
-                                      child: SizedBox(
-                                        width: 325,
-                                        height: 50,
-                                        child: TextFormField(
-                                          enabled: false,
-                                          style: TextStyle(
-                                            fontFamily: 'Regular',
-                                            fontSize: 14,
-                                            color: primary,
-                                          ),
-
-                                          decoration: InputDecoration(
-                                            suffixIcon: const Icon(
-                                              Icons.calendar_month_outlined,
-                                              color: Colors.white,
-                                            ),
-                                            hintStyle: TextStyle(
-                                              fontFamily: 'Regular',
-                                              fontSize: 14,
-                                              color: primary,
-                                            ),
-                                            hintText: dateController.text,
-                                            border: InputBorder.none,
-                                            disabledBorder: OutlineInputBorder(
-                                              borderSide: BorderSide(
-                                                color: primary,
-                                              ),
-                                              borderRadius:
-                                                  BorderRadius.circular(5),
-                                            ),
-                                            enabledBorder: OutlineInputBorder(
-                                              borderSide: BorderSide(
-                                                color: primary,
-                                              ),
-                                              borderRadius:
-                                                  BorderRadius.circular(5),
-                                            ),
-                                            focusedBorder: OutlineInputBorder(
-                                              borderSide: BorderSide(
-                                                color: primary,
-                                              ),
-                                              borderRadius:
-                                                  BorderRadius.circular(5),
-                                            ),
-                                            errorBorder: OutlineInputBorder(
-                                              borderSide: const BorderSide(
-                                                color: Colors.red,
-                                              ),
-                                              borderRadius:
-                                                  BorderRadius.circular(5),
-                                            ),
-                                            errorStyle: const TextStyle(
-                                                fontFamily: 'Bold',
-                                                fontSize: 12),
-                                            focusedErrorBorder:
-                                                OutlineInputBorder(
-                                              borderSide: const BorderSide(
-                                                color: Colors.red,
-                                              ),
-                                              borderRadius:
-                                                  BorderRadius.circular(5),
-                                            ),
-                                          ),
-
-                                          controller: dateController,
-                                          // Pass the validator to the TextFormField
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
                                 DataTable(columnSpacing: 50, columns: [
                                   DataColumn(
                                     label: TextWidget(
@@ -213,7 +223,7 @@ class _TicketsTabState extends State<TicketsTab> {
                                     ),
                                   ),
                                 ], rows: [
-                                  for (int i = 0; i < data.docs.length; i++)
+                                  for (int i = 0; i < filteredData.length; i++)
                                     DataRow(cells: [
                                       DataCell(
                                         TextWidget(
@@ -225,7 +235,8 @@ class _TicketsTabState extends State<TicketsTab> {
                                       DataCell(
                                         TextWidget(
                                           text: DateFormat('hh:mm a').format(
-                                              DateTime.parse(data.docs[i].id
+                                              DateTime.parse(filteredData[i]
+                                                  .id
                                                   .split('_')[0])),
                                           fontSize: 14,
                                           fontFamily: 'Bold',
@@ -235,7 +246,7 @@ class _TicketsTabState extends State<TicketsTab> {
                                       DataCell(
                                         TextWidget(
                                           text:
-                                              'NPS-${data.docs[i]['location']}',
+                                              'NPS-${filteredData[i]['location']}',
                                           fontSize: 14,
                                           color: primary,
                                         ),
@@ -243,9 +254,10 @@ class _TicketsTabState extends State<TicketsTab> {
                                       DataCell(
                                         TextWidget(
                                           text: DateFormat('MMMM dd, yyyy')
-                                              .format(DateTime.parse(data
-                                                  .docs[i].id
-                                                  .split('_')[0])),
+                                              .format(DateTime.parse(
+                                                  filteredData[i]
+                                                      .id
+                                                      .split('_')[0])),
                                           fontSize: 14,
                                           fontFamily: 'Bold',
                                           color: primary,
@@ -253,7 +265,7 @@ class _TicketsTabState extends State<TicketsTab> {
                                       ),
                                       DataCell(
                                         TextWidget(
-                                          text: data.docs[i]['status'],
+                                          text: filteredData[i]['status'],
                                           fontSize: 14,
                                           color: primary,
                                         ),
@@ -315,7 +327,7 @@ class _TicketsTabState extends State<TicketsTab> {
                                                                 ),
                                                                 TextWidget(
                                                                   text:
-                                                                      'Date: ${DateFormat('MMMM dd, yyyy').format(DateTime.parse(data.docs[i].id.split('_')[0]))}',
+                                                                      'Date: ${DateFormat('MMMM dd, yyyy').format(DateTime.parse(filteredData[i].id.split('_')[0]))}',
                                                                   fontSize: 12,
                                                                   color: Colors
                                                                       .black,
@@ -327,7 +339,7 @@ class _TicketsTabState extends State<TicketsTab> {
                                                                 ),
                                                                 TextWidget(
                                                                   text:
-                                                                      'Time: ${DateFormat('hh:mm a').format(DateTime.parse(data.docs[i].id.split('_')[0]))}',
+                                                                      'Time: ${DateFormat('hh:mm a').format(DateTime.parse(filteredData[i].id.split('_')[0]))}',
                                                                   fontSize: 12,
                                                                   color: Colors
                                                                       .black,
@@ -339,112 +351,112 @@ class _TicketsTabState extends State<TicketsTab> {
                                                                 ),
                                                                 rowData(
                                                                     'Name',
-                                                                    data.docs[i]
-                                                                        [
+                                                                    filteredData[
+                                                                            i][
                                                                         'name']),
                                                                 const SizedBox(
                                                                   height: 5,
                                                                 ),
                                                                 rowData(
                                                                     'Address',
-                                                                    data.docs[i]
-                                                                        [
+                                                                    filteredData[
+                                                                            i][
                                                                         'address']),
                                                                 const SizedBox(
                                                                   height: 5,
                                                                 ),
                                                                 rowData(
                                                                     'Gender',
-                                                                    data.docs[i]
-                                                                        [
+                                                                    filteredData[
+                                                                            i][
                                                                         'gender']),
                                                                 const SizedBox(
                                                                   height: 5,
                                                                 ),
                                                                 rowData(
                                                                     'Drivers License Number',
-                                                                    data.docs[i]
-                                                                        [
+                                                                    filteredData[
+                                                                            i][
                                                                         'licensenumber']),
                                                                 const SizedBox(
                                                                   height: 5,
                                                                 ),
                                                                 rowData(
                                                                     'Expiry',
-                                                                    data.docs[i]
-                                                                        [
+                                                                    filteredData[
+                                                                            i][
                                                                         'expiry']),
                                                                 const SizedBox(
                                                                   height: 5,
                                                                 ),
                                                                 rowData(
                                                                     'Nationality',
-                                                                    data.docs[i]
-                                                                        [
+                                                                    filteredData[
+                                                                            i][
                                                                         'nationality']),
                                                                 const SizedBox(
                                                                   height: 5,
                                                                 ),
                                                                 rowData(
                                                                     'Height',
-                                                                    data.docs[i]
-                                                                        [
+                                                                    filteredData[
+                                                                            i][
                                                                         'height']),
                                                                 const SizedBox(
                                                                   height: 5,
                                                                 ),
                                                                 rowData(
                                                                     'Weight',
-                                                                    data.docs[i]
-                                                                        [
+                                                                    filteredData[
+                                                                            i][
                                                                         'weight']),
                                                                 const SizedBox(
                                                                   height: 5,
                                                                 ),
                                                                 rowData(
                                                                     'Restriction',
-                                                                    data.docs[i]
-                                                                        [
+                                                                    filteredData[
+                                                                            i][
                                                                         'restriction']),
                                                                 const SizedBox(
                                                                   height: 20,
                                                                 ),
                                                                 rowData(
                                                                     'Plate No.',
-                                                                    data.docs[i]
-                                                                        [
+                                                                    filteredData[
+                                                                            i][
                                                                         'platenumber']),
                                                                 const SizedBox(
                                                                   height: 5,
                                                                 ),
                                                                 rowData(
                                                                     'Maker',
-                                                                    data.docs[i]
-                                                                        [
+                                                                    filteredData[
+                                                                            i][
                                                                         'make']),
                                                                 const SizedBox(
                                                                   height: 5,
                                                                 ),
                                                                 rowData(
                                                                     'Color',
-                                                                    data.docs[i]
-                                                                        [
+                                                                    filteredData[
+                                                                            i][
                                                                         'color']),
                                                                 const SizedBox(
                                                                   height: 5,
                                                                 ),
                                                                 rowData(
                                                                     'Model',
-                                                                    data.docs[i]
-                                                                        [
+                                                                    filteredData[
+                                                                            i][
                                                                         'model']),
                                                                 const SizedBox(
                                                                   height: 5,
                                                                 ),
                                                                 rowData(
                                                                     'Marking',
-                                                                    data.docs[i]
-                                                                        [
+                                                                    filteredData[
+                                                                            i][
                                                                         'marking']),
                                                                 const SizedBox(
                                                                   height: 20,
@@ -582,10 +594,15 @@ class _TicketsTabState extends State<TicketsTab> {
 
       setState(() {
         dateController.text = formattedDate;
+        selectedDate = pickedDate;
       });
     } else {
       return null;
     }
+  }
+
+  DateTime parseTimestamp(String timestamp) {
+    return DateTime.parse(timestamp);
   }
 
   rowData(String label, String data) {

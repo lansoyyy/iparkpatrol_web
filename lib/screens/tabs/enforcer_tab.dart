@@ -643,7 +643,7 @@ class _EnforcerTabState extends State<EnforcerTab> {
                                 ),
                               ),
                               const SizedBox(
-                                height: 50,
+                                height: 20,
                               ),
                               Padding(
                                 padding: const EdgeInsets.only(right: 50),
@@ -659,6 +659,9 @@ class _EnforcerTabState extends State<EnforcerTab> {
                                     },
                                   ),
                                 ),
+                              ),
+                              const SizedBox(
+                                height: 100,
                               ),
                             ],
                           ),

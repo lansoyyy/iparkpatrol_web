@@ -14,6 +14,8 @@ class ParkingTab extends StatefulWidget {
 class _ParkingTabState extends State<ParkingTab> {
   final dateController = TextEditingController(
       text: DateFormat('yyyy-MM-dd').format(DateTime.now()));
+
+  DateTime? selectedDate;
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -149,7 +151,17 @@ class _ParkingTabState extends State<ParkingTab> {
                       );
                     }
 
-                    final data = snapshot.requireData;
+                    final data = snapshot.requireData.docs;
+                    List<QueryDocumentSnapshot> filteredData = data;
+
+                    if (selectedDate != null) {
+                      filteredData = data.where((doc) {
+                        DateTime timestamp = parseTimestamp(doc['timestamp']);
+                        return timestamp.year == selectedDate!.year &&
+                            timestamp.month == selectedDate!.month &&
+                            timestamp.day == selectedDate!.day;
+                      }).toList();
+                    }
                     return Container(
                         width: 1000,
                         height: 525,
@@ -203,7 +215,7 @@ class _ParkingTabState extends State<ParkingTab> {
                                     ),
                                   ),
                                 ], rows: [
-                                  for (int i = 0; i < data.docs.length; i++)
+                                  for (int i = 0; i < filteredData.length; i++)
                                     DataRow(cells: [
                                       DataCell(
                                         TextWidget(
@@ -215,7 +227,8 @@ class _ParkingTabState extends State<ParkingTab> {
                                       DataCell(
                                         TextWidget(
                                           text: DateFormat('hh:mm a').format(
-                                              DateTime.parse(data.docs[i].id
+                                              DateTime.parse(filteredData[i]
+                                                  .id
                                                   .split('_')[0])),
                                           fontSize: 14,
                                           fontFamily: 'Bold',
@@ -225,9 +238,10 @@ class _ParkingTabState extends State<ParkingTab> {
                                       DataCell(
                                         TextWidget(
                                           text: DateFormat('MMMM dd, yyyy')
-                                              .format(DateTime.parse(data
-                                                  .docs[i].id
-                                                  .split('_')[0])),
+                                              .format(DateTime.parse(
+                                                  filteredData[i]
+                                                      .id
+                                                      .split('_')[0])),
                                           fontSize: 14,
                                           fontFamily: 'Bold',
                                           color: primary,
@@ -236,7 +250,7 @@ class _ParkingTabState extends State<ParkingTab> {
                                       DataCell(
                                         TextWidget(
                                           text:
-                                              '${data.docs[i]['location']} - ${data.docs[i]['title_of_violation']}',
+                                              '${filteredData[i]['location']} - ${filteredData[i]['title_of_violation']}',
                                           fontSize: 14,
                                           color: primary,
                                           fontFamily: 'Bold',
@@ -254,7 +268,7 @@ class _ParkingTabState extends State<ParkingTab> {
                                                   decoration: BoxDecoration(
                                                     image: DecorationImage(
                                                         image: NetworkImage(
-                                                          data.docs[i]
+                                                          filteredData[i]
                                                               ['image_url'],
                                                         ),
                                                         fit: BoxFit.cover),
@@ -321,9 +335,14 @@ class _ParkingTabState extends State<ParkingTab> {
 
       setState(() {
         dateController.text = formattedDate;
+        selectedDate = pickedDate;
       });
     } else {
       return null;
     }
+  }
+
+  DateTime parseTimestamp(String timestamp) {
+    return DateTime.parse(timestamp);
   }
 }
