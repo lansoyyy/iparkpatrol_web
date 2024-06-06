@@ -755,170 +755,338 @@ class _EnforcerTabState extends State<EnforcerTab> {
 
   showInfoDialog(data) {
     setState(() {
-      name.text = data['name'];
-      address.text = data['address'];
-      monthController.text = data['birthdate'];
+      fnameController.text = data['fname'];
+      lnameController.text = data['lname'];
+      mnameController.text = data['mi'];
       sex.text = data['sex'];
+      purokController.text = data['purok'];
+      brgyController.text = data['brgy'];
+      cityController.text = data['city'];
+      provinceController.text = data['province'];
+      monthController.text = data['month'];
+      dayController.text = data['day'];
+      yearController.text = data['year'];
+      birthplace.text = data['birthplace'];
+      email.text = data['email'];
+      password.text = '******';
+      id.text = data['idnumber'];
     });
     return showDialog(
       context: context,
       builder: (context) {
         return Dialog(
-          child: SizedBox(
-            height: 500,
-            width: 700,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Icon(
-                  Icons.account_circle,
-                  color: primary,
-                  size: 100,
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    TextFieldWidget(
-                      width: 250,
-                      textColor: Colors.black,
-                      controller: name,
-                      label: 'Name',
-                    ),
-                    const SizedBox(
-                      width: 20,
-                    ),
-                    TextFieldWidget(
-                      width: 250,
-                      textColor: Colors.black,
-                      controller: address,
-                      label: 'Address',
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Column(
+            child: SizedBox(
+                width: 1000,
+                height: 550,
+                child: SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Column(
                       children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            TextFieldWidget(
-                              width: 150,
-                              textColor: Colors.black,
-                              controller: monthController,
-                              label: 'Birthdate',
+                        CircleAvatar(
+                          minRadius: 50,
+                          maxRadius: 50,
+                          child: Image.network(data['img']),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 15, right: 15),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(left: 10),
+                                child: TextWidget(
+                                  text: 'Personal Information',
+                                  decoration: TextDecoration.underline,
+                                  fontSize: 14,
+                                  fontFamily: 'Bold',
+                                  color: primary,
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  TextFieldWidget(
+                                    textColor: primary,
+                                    width: 200,
+                                    label: 'First Name',
+                                    controller: fnameController,
+                                  ),
+                                  const SizedBox(
+                                    width: 20,
+                                  ),
+                                  TextFieldWidget(
+                                    textColor: primary,
+                                    width: 80,
+                                    label: 'M.I',
+                                    controller: mnameController,
+                                  ),
+                                  const SizedBox(
+                                    width: 20,
+                                  ),
+                                  TextFieldWidget(
+                                    textColor: primary,
+                                    width: 200,
+                                    label: 'Last Name',
+                                    controller: lnameController,
+                                  ),
+                                  const SizedBox(
+                                    width: 20,
+                                  ),
+                                  TextFieldWidget(
+                                    textColor: primary,
+                                    width: 100,
+                                    label: 'Gender',
+                                    controller: sex,
+                                  ),
+                                  const SizedBox(
+                                    width: 100,
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(
+                                height: 20,
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(left: 10),
+                                child: TextWidget(
+                                  text: 'Home Address',
+                                  decoration: TextDecoration.underline,
+                                  fontSize: 14,
+                                  fontFamily: 'Bold',
+                                  color: primary,
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  TextFieldWidget(
+                                    textColor: primary,
+                                    width: 175,
+                                    label: 'Purok/Street/Zone',
+                                    controller: purokController,
+                                  ),
+                                  const SizedBox(
+                                    width: 20,
+                                  ),
+                                  TextFieldWidget(
+                                    textColor: primary,
+                                    width: 175,
+                                    label: 'Barangay',
+                                    controller: brgyController,
+                                  ),
+                                  const SizedBox(
+                                    width: 20,
+                                  ),
+                                  TextFieldWidget(
+                                    textColor: primary,
+                                    width: 175,
+                                    label: 'Municipality/City',
+                                    controller: cityController,
+                                  ),
+                                  const SizedBox(
+                                    width: 20,
+                                  ),
+                                  TextFieldWidget(
+                                    textColor: primary,
+                                    width: 175,
+                                    label: 'Province',
+                                    controller: provinceController,
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              const SizedBox(
+                                height: 20,
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(left: 10),
+                                child: TextWidget(
+                                  text: 'Birthdate',
+                                  decoration: TextDecoration.underline,
+                                  fontSize: 14,
+                                  fontFamily: 'Bold',
+                                  color: primary,
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  GestureDetector(
+                                    onTap: () {
+                                      dateFromPicker(context);
+                                    },
+                                    child: TextFieldWidget(
+                                      isEnabled: false,
+                                      textColor: primary,
+                                      width: 125,
+                                      label: 'Month',
+                                      controller: monthController,
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    width: 20,
+                                  ),
+                                  GestureDetector(
+                                    onTap: () {
+                                      dateFromPicker(context);
+                                    },
+                                    child: TextFieldWidget(
+                                      isEnabled: false,
+                                      textColor: primary,
+                                      inputType: TextInputType.number,
+                                      width: 85,
+                                      label: 'Day',
+                                      controller: dayController,
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    width: 20,
+                                  ),
+                                  GestureDetector(
+                                    onTap: () {
+                                      dateFromPicker(context);
+                                    },
+                                    child: TextFieldWidget(
+                                      isEnabled: false,
+                                      textColor: primary,
+                                      inputType: TextInputType.number,
+                                      width: 125,
+                                      label: 'Year',
+                                      controller: yearController,
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    width: 20,
+                                  ),
+                                  TextFieldWidget(
+                                    textColor: primary,
+                                    inputType: TextInputType.number,
+                                    width: 250,
+                                    label: 'Birthplace',
+                                    controller: birthplace,
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 15, right: 15),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(left: 10),
+                                child: TextWidget(
+                                  text: 'Login Information',
+                                  decoration: TextDecoration.underline,
+                                  fontSize: 14,
+                                  fontFamily: 'Bold',
+                                  color: primary,
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  TextFieldWidget(
+                                    isEnabled: false,
+                                    textColor: primary,
+                                    width: 200,
+                                    label: 'Email',
+                                    controller: email,
+                                  ),
+                                  const SizedBox(
+                                    width: 20,
+                                  ),
+                                  TextFieldWidget(
+                                    isEnabled: false,
+                                    textColor: primary,
+                                    isObscure: true,
+                                    width: 200,
+                                    label: 'Password',
+                                    controller: password,
+                                  ),
+                                  const SizedBox(
+                                    width: 20,
+                                  ),
+                                  TextFieldWidget(
+                                    isEnabled: false,
+                                    textColor: primary,
+                                    width: 200,
+                                    label: 'Enforcer ID Number',
+                                    controller: id,
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(right: 50),
+                          child: Align(
+                            alignment: Alignment.bottomRight,
+                            child: ButtonWidget(
+                              color: Colors.blue,
+                              width: 200,
+                              fontSize: 12,
+                              label: 'Update',
+                              onPressed: () async {
+                                await FirebaseFirestore.instance
+                                    .collection('Enforcers')
+                                    .doc(data.id)
+                                    .update({
+                                  'fname': fnameController.text,
+                                  'mi': mnameController.text,
+                                  'lname': lnameController.text,
+                                  'purok': purokController.text,
+                                  'brgy': brgyController.text,
+                                  'city': cityController.text,
+                                  'province': provinceController.text,
+                                  'sex': sex.text,
+                                  'month': monthController.text,
+                                  'day': dayController.text,
+                                  'year': yearController.text,
+                                  'birthplace': birthplace.text,
+                                  'name':
+                                      '${fnameController.text} ${mnameController.text} ${lnameController.text}',
+                                  'address':
+                                      '${purokController.text} ${brgyController.text} ${cityController.text} ${provinceController.text}',
+                                  'birthdate':
+                                      '${dayController.text}/${monthController.text}/${yearController.text}',
+                                });
+                                Navigator.pop(context);
+                              },
                             ),
-                            const SizedBox(
-                              width: 20,
-                            ),
-                            TextFieldWidget(
-                              width: 150,
-                              textColor: Colors.black,
-                              controller: sex,
-                              label: 'Sex',
-                            ),
-                          ],
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 50,
                         ),
                       ],
                     ),
-                    const SizedBox(
-                      width: 20,
-                    ),
-                    Container(
-                      width: 250,
-                      height: 150,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        border: Border.all(
-                          color: primary,
-                        ),
-                        borderRadius: BorderRadius.circular(
-                          15,
-                        ),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            TextWidget(
-                              text: 'Documents',
-                              fontSize: 14,
-                              color: primary,
-                              fontFamily: 'Bold',
-                            ),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            Container(
-                              width: 225,
-                              height: 40,
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                border: Border.all(
-                                  color: primary,
-                                ),
-                                borderRadius: BorderRadius.circular(
-                                  5,
-                                ),
-                              ),
-                            ),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            Container(
-                              width: 225,
-                              height: 40,
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                border: Border.all(
-                                  color: primary,
-                                ),
-                                borderRadius: BorderRadius.circular(
-                                  5,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 50,
-                ),
-                ButtonWidget(
-                  width: 150,
-                  color: primary,
-                  fontSize: 14,
-                  label: 'Apply Changes',
-                  onPressed: () async {
-                    await FirebaseFirestore.instance
-                        .collection('Enforcers')
-                        .doc(data.id)
-                        .update({
-                      'name': name.text,
-                      'address': address.text,
-                      'birthdate': monthController.text,
-                      'sex': sex.text
-                    });
-                    Navigator.pop(context);
-                  },
-                ),
-              ],
-            ),
-          ),
-        );
+                  ),
+                )));
       },
     );
   }
