@@ -208,7 +208,7 @@ class _TicketsTabState extends State<TicketsTab> {
                                   ),
                                   DataColumn(
                                     label: TextWidget(
-                                      text: 'Status',
+                                      text: 'Enforcer In Charge',
                                       fontSize: 18,
                                       fontFamily: 'Bold',
                                       color: primary,
@@ -264,298 +264,379 @@ class _TicketsTabState extends State<TicketsTab> {
                                         ),
                                       ),
                                       DataCell(
-                                        TextWidget(
-                                          text: filteredData[i]['status'],
-                                          fontSize: 14,
-                                          color: primary,
-                                        ),
+                                        StreamBuilder<DocumentSnapshot>(
+                                            stream: FirebaseFirestore.instance
+                                                .collection('Enforcers')
+                                                .doc(filteredData[i]
+                                                    ['enforcerId'])
+                                                .snapshots(),
+                                            builder: (context,
+                                                AsyncSnapshot<DocumentSnapshot>
+                                                    snapshot) {
+                                              if (!snapshot.hasData) {
+                                                return const Center(
+                                                    child: Text('Loading'));
+                                              } else if (snapshot.hasError) {
+                                                return const Center(
+                                                    child: Text(
+                                                        'Something went wrong'));
+                                              } else if (snapshot
+                                                      .connectionState ==
+                                                  ConnectionState.waiting) {
+                                                return const Center(
+                                                    child:
+                                                        CircularProgressIndicator());
+                                              }
+                                              dynamic enforcerdata =
+                                                  snapshot.data;
+                                              return TextWidget(
+                                                text: '${enforcerdata['name']}',
+                                                fontSize: 14,
+                                                fontFamily: 'Bold',
+                                                color: primary,
+                                              );
+                                            }),
                                       ),
-                                      DataCell(TextButton(
-                                        onPressed: () {
-                                          showDialog(
-                                            context: context,
-                                            builder: (context) {
-                                              return AlertDialog(
-                                                content: Padding(
-                                                  padding:
-                                                      const EdgeInsets.fromLTRB(
-                                                          20, 30, 20, 20),
-                                                  child: SingleChildScrollView(
-                                                    child: Column(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .center,
-                                                      children: [
-                                                        Container(
-                                                          width:
-                                                              double.infinity,
-                                                          height: 650,
-                                                          decoration:
-                                                              BoxDecoration(
-                                                            color: Colors.white,
-                                                            border: Border.all(
-                                                                color: primary),
-                                                          ),
-                                                          child: Padding(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                    .fromLTRB(
-                                                                    20,
-                                                                    20,
-                                                                    20,
-                                                                    20),
-                                                            child: Column(
-                                                              crossAxisAlignment:
-                                                                  CrossAxisAlignment
-                                                                      .start,
-                                                              children: [
-                                                                Center(
-                                                                  child:
-                                                                      TextWidget(
-                                                                    text:
-                                                                        'Illegal Parking Citation Ticket',
-                                                                    fontSize:
-                                                                        18,
-                                                                    color: Colors
-                                                                        .black,
-                                                                    fontFamily:
-                                                                        'Bold',
-                                                                  ),
-                                                                ),
-                                                                const SizedBox(
-                                                                  height: 20,
-                                                                ),
-                                                                TextWidget(
-                                                                  text:
-                                                                      'Date: ${DateFormat('MMMM dd, yyyy').format(DateTime.parse(filteredData[i].id.split('_')[0]))}',
-                                                                  fontSize: 12,
+                                      DataCell(StreamBuilder<DocumentSnapshot>(
+                                          stream: FirebaseFirestore.instance
+                                              .collection('Enforcers')
+                                              .doc(
+                                                  filteredData[i]['enforcerId'])
+                                              .snapshots(),
+                                          builder: (context,
+                                              AsyncSnapshot<DocumentSnapshot>
+                                                  snapshot) {
+                                            if (!snapshot.hasData) {
+                                              return const Center(
+                                                  child: Text('Loading'));
+                                            } else if (snapshot.hasError) {
+                                              return const Center(
+                                                  child: Text(
+                                                      'Something went wrong'));
+                                            } else if (snapshot
+                                                    .connectionState ==
+                                                ConnectionState.waiting) {
+                                              return const Center(
+                                                  child:
+                                                      CircularProgressIndicator());
+                                            }
+                                            dynamic enforcerdata =
+                                                snapshot.data;
+                                            return TextButton(
+                                              onPressed: () {
+                                                showDialog(
+                                                  context: context,
+                                                  builder: (context) {
+                                                    return AlertDialog(
+                                                      content: Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .fromLTRB(
+                                                                20, 30, 20, 20),
+                                                        child:
+                                                            SingleChildScrollView(
+                                                          child: Column(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .center,
+                                                            children: [
+                                                              Container(
+                                                                width: double
+                                                                    .infinity,
+                                                                height: 650,
+                                                                decoration:
+                                                                    BoxDecoration(
                                                                   color: Colors
-                                                                      .black,
-                                                                  fontFamily:
-                                                                      'Medium',
+                                                                      .white,
+                                                                  border: Border
+                                                                      .all(
+                                                                          color:
+                                                                              primary),
                                                                 ),
-                                                                const SizedBox(
-                                                                  height: 5,
-                                                                ),
-                                                                TextWidget(
-                                                                  text:
-                                                                      'Time: ${DateFormat('hh:mm a').format(DateTime.parse(filteredData[i].id.split('_')[0]))}',
-                                                                  fontSize: 12,
-                                                                  color: Colors
-                                                                      .black,
-                                                                  fontFamily:
-                                                                      'Medium',
-                                                                ),
-                                                                const SizedBox(
-                                                                  height: 10,
-                                                                ),
-                                                                rowData(
-                                                                    'Name',
-                                                                    filteredData[
-                                                                            i][
-                                                                        'name']),
-                                                                const SizedBox(
-                                                                  height: 5,
-                                                                ),
-                                                                rowData(
-                                                                    'Address',
-                                                                    filteredData[
-                                                                            i][
-                                                                        'address']),
-                                                                const SizedBox(
-                                                                  height: 5,
-                                                                ),
-                                                                rowData(
-                                                                    'Gender',
-                                                                    filteredData[
-                                                                            i][
-                                                                        'gender']),
-                                                                const SizedBox(
-                                                                  height: 5,
-                                                                ),
-                                                                rowData(
-                                                                    'Drivers License Number',
-                                                                    filteredData[
-                                                                            i][
-                                                                        'licensenumber']),
-                                                                const SizedBox(
-                                                                  height: 5,
-                                                                ),
-                                                                rowData(
-                                                                    'Expiry',
-                                                                    filteredData[
-                                                                            i][
-                                                                        'expiry']),
-                                                                const SizedBox(
-                                                                  height: 5,
-                                                                ),
-                                                                rowData(
-                                                                    'Nationality',
-                                                                    filteredData[
-                                                                            i][
-                                                                        'nationality']),
-                                                                const SizedBox(
-                                                                  height: 5,
-                                                                ),
-                                                                rowData(
-                                                                    'Height',
-                                                                    filteredData[
-                                                                            i][
-                                                                        'height']),
-                                                                const SizedBox(
-                                                                  height: 5,
-                                                                ),
-                                                                rowData(
-                                                                    'Weight',
-                                                                    filteredData[
-                                                                            i][
-                                                                        'weight']),
-                                                                const SizedBox(
-                                                                  height: 5,
-                                                                ),
-                                                                rowData(
-                                                                    'Restriction',
-                                                                    filteredData[
-                                                                            i][
-                                                                        'restriction']),
-                                                                const SizedBox(
-                                                                  height: 20,
-                                                                ),
-                                                                rowData(
-                                                                    'Plate No.',
-                                                                    filteredData[
-                                                                            i][
-                                                                        'platenumber']),
-                                                                const SizedBox(
-                                                                  height: 5,
-                                                                ),
-                                                                rowData(
-                                                                    'Maker',
-                                                                    filteredData[
-                                                                            i][
-                                                                        'make']),
-                                                                const SizedBox(
-                                                                  height: 5,
-                                                                ),
-                                                                rowData(
-                                                                    'Color',
-                                                                    filteredData[
-                                                                            i][
-                                                                        'color']),
-                                                                const SizedBox(
-                                                                  height: 5,
-                                                                ),
-                                                                rowData(
-                                                                    'Model',
-                                                                    filteredData[
-                                                                            i][
-                                                                        'model']),
-                                                                const SizedBox(
-                                                                  height: 5,
-                                                                ),
-                                                                rowData(
-                                                                    'Marking',
-                                                                    filteredData[
-                                                                            i][
-                                                                        'marking']),
-                                                                const SizedBox(
-                                                                  height: 20,
-                                                                ),
-                                                                // Align(
-                                                                //   alignment:
-                                                                //       Alignment
-                                                                //           .bottomRight,
-                                                                //   child: Column(
-                                                                //     mainAxisAlignment:
-                                                                //         MainAxisAlignment
-                                                                //             .center,
-                                                                //     crossAxisAlignment:
-                                                                //         CrossAxisAlignment
-                                                                //             .center,
-                                                                //     children: [
-                                                                //       TextWidget(
-                                                                //         decoration:
-                                                                //             TextDecoration.underline,
-                                                                //         text:
-                                                                //             'Mark Lister Nalupa',
-                                                                //         fontSize:
-                                                                //             14,
-                                                                //         color: Colors
-                                                                //             .black,
-                                                                //       ),
-                                                                //       TextWidget(
-                                                                //         text:
-                                                                //             'Traffic Enforcer on Case',
-                                                                //         fontSize:
-                                                                //             14,
-                                                                //         color: Colors
-                                                                //             .black,
-                                                                //         fontFamily:
-                                                                //             'Bold',
-                                                                //       ),
-                                                                //     ],
-                                                                //   ),
-                                                                // ),
-                                                                // const SizedBox(
-                                                                //   height: 10,
-                                                                // ),
-                                                                Align(
-                                                                  alignment:
-                                                                      Alignment
-                                                                          .bottomLeft,
-                                                                  child: Row(
-                                                                    mainAxisAlignment:
-                                                                        MainAxisAlignment
-                                                                            .start,
+                                                                child: Padding(
+                                                                  padding:
+                                                                      const EdgeInsets
+                                                                          .fromLTRB(
+                                                                          20,
+                                                                          20,
+                                                                          20,
+                                                                          20),
+                                                                  child: Column(
                                                                     crossAxisAlignment:
                                                                         CrossAxisAlignment
-                                                                            .center,
+                                                                            .start,
                                                                     children: [
-                                                                      Image
-                                                                          .asset(
-                                                                        'assets/images/logo.png',
-                                                                        height:
-                                                                            75,
+                                                                      Center(
+                                                                        child:
+                                                                            TextWidget(
+                                                                          text:
+                                                                              'Illegal Parking Citation Ticket',
+                                                                          fontSize:
+                                                                              18,
+                                                                          color:
+                                                                              Colors.black,
+                                                                          fontFamily:
+                                                                              'Bold',
+                                                                        ),
                                                                       ),
-                                                                      Image
-                                                                          .asset(
-                                                                        'assets/images/RTA logo 1.png',
+                                                                      const SizedBox(
                                                                         height:
-                                                                            75,
+                                                                            20,
+                                                                      ),
+                                                                      TextWidget(
+                                                                        text:
+                                                                            'Date: ${DateFormat('MMMM dd, yyyy').format(DateTime.parse(filteredData[i].id.split('_')[0]))}',
+                                                                        fontSize:
+                                                                            12,
+                                                                        color: Colors
+                                                                            .black,
+                                                                        fontFamily:
+                                                                            'Medium',
+                                                                      ),
+                                                                      const SizedBox(
+                                                                        height:
+                                                                            5,
+                                                                      ),
+                                                                      TextWidget(
+                                                                        text:
+                                                                            'Time: ${DateFormat('hh:mm a').format(DateTime.parse(filteredData[i].id.split('_')[0]))}',
+                                                                        fontSize:
+                                                                            12,
+                                                                        color: Colors
+                                                                            .black,
+                                                                        fontFamily:
+                                                                            'Medium',
+                                                                      ),
+                                                                      const SizedBox(
+                                                                        height:
+                                                                            10,
+                                                                      ),
+                                                                      rowData(
+                                                                          'Name',
+                                                                          filteredData[i]
+                                                                              [
+                                                                              'name']),
+                                                                      const SizedBox(
+                                                                        height:
+                                                                            5,
+                                                                      ),
+                                                                      rowData(
+                                                                          'Address',
+                                                                          filteredData[i]
+                                                                              [
+                                                                              'address']),
+                                                                      const SizedBox(
+                                                                        height:
+                                                                            5,
+                                                                      ),
+                                                                      rowData(
+                                                                          'Gender',
+                                                                          filteredData[i]
+                                                                              [
+                                                                              'gender']),
+                                                                      const SizedBox(
+                                                                        height:
+                                                                            5,
+                                                                      ),
+                                                                      rowData(
+                                                                          'Drivers License Number',
+                                                                          filteredData[i]
+                                                                              [
+                                                                              'licensenumber']),
+                                                                      const SizedBox(
+                                                                        height:
+                                                                            5,
+                                                                      ),
+                                                                      rowData(
+                                                                          'Expiry',
+                                                                          filteredData[i]
+                                                                              [
+                                                                              'expiry']),
+                                                                      const SizedBox(
+                                                                        height:
+                                                                            5,
+                                                                      ),
+                                                                      rowData(
+                                                                          'Nationality',
+                                                                          filteredData[i]
+                                                                              [
+                                                                              'nationality']),
+                                                                      const SizedBox(
+                                                                        height:
+                                                                            5,
+                                                                      ),
+                                                                      rowData(
+                                                                          'Height',
+                                                                          filteredData[i]
+                                                                              [
+                                                                              'height']),
+                                                                      const SizedBox(
+                                                                        height:
+                                                                            5,
+                                                                      ),
+                                                                      rowData(
+                                                                          'Weight',
+                                                                          filteredData[i]
+                                                                              [
+                                                                              'weight']),
+                                                                      const SizedBox(
+                                                                        height:
+                                                                            5,
+                                                                      ),
+                                                                      rowData(
+                                                                          'Restriction',
+                                                                          filteredData[i]
+                                                                              [
+                                                                              'restriction']),
+                                                                      const SizedBox(
+                                                                        height:
+                                                                            20,
+                                                                      ),
+                                                                      rowData(
+                                                                          'Plate No.',
+                                                                          filteredData[i]
+                                                                              [
+                                                                              'platenumber']),
+                                                                      const SizedBox(
+                                                                        height:
+                                                                            5,
+                                                                      ),
+                                                                      rowData(
+                                                                          'Maker',
+                                                                          filteredData[i]
+                                                                              [
+                                                                              'make']),
+                                                                      const SizedBox(
+                                                                        height:
+                                                                            5,
+                                                                      ),
+                                                                      rowData(
+                                                                          'Color',
+                                                                          filteredData[i]
+                                                                              [
+                                                                              'color']),
+                                                                      const SizedBox(
+                                                                        height:
+                                                                            5,
+                                                                      ),
+                                                                      rowData(
+                                                                          'Model',
+                                                                          filteredData[i]
+                                                                              [
+                                                                              'model']),
+                                                                      const SizedBox(
+                                                                        height:
+                                                                            5,
+                                                                      ),
+                                                                      rowData(
+                                                                          'Marking',
+                                                                          filteredData[i]
+                                                                              [
+                                                                              'marking']),
+                                                                      const SizedBox(
+                                                                        height:
+                                                                            5,
+                                                                      ),
+                                                                      rowData(
+                                                                          'Enforcer',
+                                                                          enforcerdata[
+                                                                              'name']),
+                                                                      const SizedBox(
+                                                                        height:
+                                                                            20,
+                                                                      ),
+                                                                      // Align(
+                                                                      //   alignment:
+                                                                      //       Alignment
+                                                                      //           .bottomRight,
+                                                                      //   child: Column(
+                                                                      //     mainAxisAlignment:
+                                                                      //         MainAxisAlignment
+                                                                      //             .center,
+                                                                      //     crossAxisAlignment:
+                                                                      //         CrossAxisAlignment
+                                                                      //             .center,
+                                                                      //     children: [
+                                                                      //       TextWidget(
+                                                                      //         decoration:
+                                                                      //             TextDecoration.underline,
+                                                                      //         text:
+                                                                      //             'Mark Lister Nalupa',
+                                                                      //         fontSize:
+                                                                      //             14,
+                                                                      //         color: Colors
+                                                                      //             .black,
+                                                                      //       ),
+                                                                      //       TextWidget(
+                                                                      //         text:
+                                                                      //             'Traffic Enforcer on Case',
+                                                                      //         fontSize:
+                                                                      //             14,
+                                                                      //         color: Colors
+                                                                      //             .black,
+                                                                      //         fontFamily:
+                                                                      //             'Bold',
+                                                                      //       ),
+                                                                      //     ],
+                                                                      //   ),
+                                                                      // ),
+                                                                      // const SizedBox(
+                                                                      //   height: 10,
+                                                                      // ),
+                                                                      Align(
+                                                                        alignment:
+                                                                            Alignment.bottomLeft,
+                                                                        child:
+                                                                            Row(
+                                                                          mainAxisAlignment:
+                                                                              MainAxisAlignment.start,
+                                                                          crossAxisAlignment:
+                                                                              CrossAxisAlignment.center,
+                                                                          children: [
+                                                                            Image.asset(
+                                                                              'assets/images/logo.png',
+                                                                              height: 75,
+                                                                            ),
+                                                                            Image.asset(
+                                                                              'assets/images/RTA logo 1.png',
+                                                                              height: 75,
+                                                                            ),
+                                                                          ],
+                                                                        ),
                                                                       ),
                                                                     ],
                                                                   ),
                                                                 ),
-                                                              ],
-                                                            ),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      actions: [
+                                                        TextButton(
+                                                          onPressed: () {
+                                                            Navigator.pop(
+                                                                context);
+                                                          },
+                                                          child: TextWidget(
+                                                            text: 'Close',
+                                                            fontSize: 18,
                                                           ),
                                                         ),
                                                       ],
-                                                    ),
-                                                  ),
-                                                ),
-                                                actions: [
-                                                  TextButton(
-                                                    onPressed: () {
-                                                      Navigator.pop(context);
-                                                    },
-                                                    child: TextWidget(
-                                                      text: 'Close',
-                                                      fontSize: 18,
-                                                    ),
-                                                  ),
-                                                ],
-                                              );
-                                            },
-                                          );
-                                        },
-                                        child: TextWidget(
-                                          text: 'View Ticket',
-                                          decoration: TextDecoration.underline,
-                                          fontSize: 14,
-                                          color: primary,
-                                        ),
-                                      )),
+                                                    );
+                                                  },
+                                                );
+                                              },
+                                              child: TextWidget(
+                                                text: 'View Ticket',
+                                                decoration:
+                                                    TextDecoration.underline,
+                                                fontSize: 14,
+                                                color: primary,
+                                              ),
+                                            );
+                                          })),
                                     ])
                                 ])
                               ],
